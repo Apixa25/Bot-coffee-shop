@@ -194,6 +194,16 @@ function LoginForm() {
               : "Don't have an account? Sign up"}
           </button>
         </div>
+
+        <div className="text-center text-sm text-gray-500 space-x-3 pt-4 border-t border-gray-200">
+          <a href="/privacy" className="hover:text-gray-700 underline">
+            Privacy Policy
+          </a>
+          <span>•</span>
+          <a href="/terms" className="hover:text-gray-700 underline">
+            Terms of Service
+          </a>
+        </div>
       </div>
     </div>
   );
