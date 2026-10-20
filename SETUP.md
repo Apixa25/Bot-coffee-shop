@@ -40,7 +40,7 @@ This guide walks you through deploying the Bot Coffee Shop MVP to free-tier serv
 6. Copy the contents of `supabase/migrations/20241020000002_row_level_security.sql`
 7. Paste and click **Run**
 8. Create another new query
-9. Copy the contents of `supabase/migrations/20241020000003_auto_create_owner_profile.sql`
+9. Copy the contents of `supabase/migrations/20241020000004_auto_create_owner_profile.sql`
 10. Paste and click **Run**
 
 ### Option B: Using Supabase CLI
@@ -172,7 +172,7 @@ NEXT_PUBLIC_APP_URL=https://your-project.vercel.app
 3. Select your Google account
 4. You should be redirected to the dashboard
 
-**Note**: The first time a user signs in with Google, an owner profile is automatically created via database trigger (migration `20241020000003_auto_create_owner_profile.sql`).
+**Note**: The first time a user signs in with Google, an owner profile is automatically created via database trigger (migration `20241020000004_auto_create_owner_profile.sql`).
 
 ## Step 7: Test Locally (Optional)
 
