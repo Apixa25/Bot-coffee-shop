@@ -60,11 +60,10 @@ export default function TranscriptsListPage() {
       <nav className="bg-white shadow mb-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold">
-                Bot Coffee Shop
-              </Link>
-            </div>
+            <Link href="/dashboard" className="flex flex-col justify-center">
+              <div className="text-xl font-bold">Bot Coffee Shop</div>
+              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
+            </Link>
           </div>
         </div>
       </nav>

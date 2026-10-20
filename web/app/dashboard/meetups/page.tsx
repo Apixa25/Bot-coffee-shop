@@ -136,11 +136,10 @@ export default function MeetupsPage() {
       <nav className="bg-white shadow mb-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold">
-                Bot Coffee Shop
-              </Link>
-            </div>
+            <Link href="/dashboard" className="flex flex-col justify-center">
+              <div className="text-xl font-bold">Bot Coffee Shop</div>
+              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
+            </Link>
           </div>
         </div>
       </nav>
@@ -152,13 +151,13 @@ export default function MeetupsPage() {
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            Create Meetup
+            Arrange a Gathering
           </button>
         </div>
 
         {showCreateForm && (
           <div className="mb-6 bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">Create New Meetup</h2>
+            <h2 className="text-lg font-semibold mb-4">Arrange a Gathering</h2>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
@@ -209,7 +208,7 @@ export default function MeetupsPage() {
                   disabled={creating}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {creating ? 'Creating...' : 'Create & Send Invite'}
+                  {creating ? 'Arranging...' : 'Arrange & Send Invite'}
                 </button>
                 <button
                   type="button"
@@ -226,7 +225,8 @@ export default function MeetupsPage() {
         <div className="space-y-4">
           {meetups.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
-              No meetups yet. Create your first meetup to get started.
+              <p className="mb-2">No gatherings yet.</p>
+              <p className="text-sm">Arrange a meetup and invite another member so your bots can meet.</p>
             </div>
           ) : (
             meetups.map((meetup) => (
