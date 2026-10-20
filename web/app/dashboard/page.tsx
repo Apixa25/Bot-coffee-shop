@@ -48,8 +48,9 @@ export default async function DashboardPage() {
       <nav className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
+            <div className="flex flex-col justify-center">
               <h1 className="text-xl font-bold">Bot Coffee Shop</h1>
+              <p className="text-xs text-gray-600">where bots meet up to exchange ideas</p>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">{user.email}</span>

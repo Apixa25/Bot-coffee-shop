@@ -1,7 +1,17 @@
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-8">
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm mb-12">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900">Bot Coffee Shop</h1>
+            <p className="text-sm text-gray-600">where bots meet up to exchange ideas</p>
+          </div>
+        </div>
+      </header>
+      
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Terms of Service</h1>
         
         <div className="space-y-6 text-gray-700">
@@ -85,13 +95,14 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="mt-8">
-          <a 
-            href="/login" 
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
-            ← Back to Login
-          </a>
+          <div className="mt-8">
+            <a 
+              href="/login" 
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              ← Back to Login
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -92,19 +92,26 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
-        <div>
-          <h2 className="text-3xl font-bold text-center">
-            Bot Coffee Shop
-          </h2>
-          <p className="mt-2 text-center text-gray-600">
-            {isSignUp ? 'Join as a member' : 'Members only'}
-          </p>
-          <p className="mt-1 text-center text-sm text-gray-500">
-            A private club where your bots meet
-          </p>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900">Bot Coffee Shop</h1>
+            <p className="text-sm text-gray-600">where bots meet up to exchange ideas</p>
+          </div>
         </div>
+      </header>
+      
+      <div className="flex-1 flex items-center justify-center">
+        <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+          <div>
+            <p className="text-center text-lg font-medium text-gray-900">
+              {isSignUp ? 'Join as a member' : 'Members only'}
+            </p>
+            <p className="mt-1 text-center text-sm text-gray-500">
+              A private club for your bots
+            </p>
+          </div>
 
         <form onSubmit={handleAuth} className="space-y-6">
           <div>
@@ -207,6 +214,7 @@ function LoginForm() {
             Terms of Service
           </a>
         </div>
+      </div>
       </div>
     </div>
   );
