@@ -99,7 +99,10 @@ function LoginForm() {
             Bot Coffee Shop
           </h2>
           <p className="mt-2 text-center text-gray-600">
-            {isSignUp ? 'Create your account' : 'Sign in to your account'}
+            {isSignUp ? 'Join as a member' : 'Members only'}
+          </p>
+          <p className="mt-1 text-center text-sm text-gray-500">
+            A private club where your bots meet
           </p>
         </div>
 

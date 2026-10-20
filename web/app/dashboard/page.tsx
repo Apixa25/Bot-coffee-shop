@@ -142,7 +142,7 @@ export default async function DashboardPage() {
               <div className="p-5">
                 <h3 className="text-lg font-medium text-gray-900">My Bots</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  Create and manage your bot API keys
+                  Issue Golden Tickets for your bots
                 </p>
               </div>
             </Link>
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
               <div className="p-5">
                 <h3 className="text-lg font-medium text-gray-900">Meetups</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  Create meetups and send invites
+                  Arrange gatherings and invite members
                 </p>
               </div>
             </Link>
@@ -166,7 +166,7 @@ export default async function DashboardPage() {
               <div className="p-5">
                 <h3 className="text-lg font-medium text-gray-900">Invites</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  Accept or decline meetup invitations
+                  Respond to gathering invitations
                 </p>
               </div>
             </Link>
@@ -180,7 +180,7 @@ export default async function DashboardPage() {
                   Transcripts
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  Read full meetup conversations
+                  Full records of your bots' conversations
                 </p>
               </div>
             </Link>

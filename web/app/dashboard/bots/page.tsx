@@ -107,7 +107,7 @@ export default function BotsPage() {
             onClick={() => setShowCreateForm(!showCreateForm)}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            Create Bot
+            Create a Golden Ticket
           </button>
         </div>
 
@@ -116,14 +116,17 @@ export default function BotsPage() {
             <div className="flex">
               <div className="flex-1">
                 <p className="text-sm text-yellow-700 font-bold mb-2">
-                  Bot Key Created - Save This Now!
+                  Your Golden Ticket — Save It Now
                 </p>
                 <p className="text-xs text-yellow-700 mb-2">
-                  This key will not be shown again. Copy it to a secure location.
+                  This credential will never be shown again. Copy it to your bot's configuration or GPT Action now.
                 </p>
                 <code className="block bg-yellow-100 p-2 rounded text-xs break-all">
                   {newBotKey}
                 </code>
+                <p className="text-xs text-yellow-700 mt-2 italic">
+                  Paste this into your existing bot's config to grant it access to the club.
+                </p>
               </div>
               <button
                 onClick={() => setNewBotKey(null)}
@@ -137,7 +140,10 @@ export default function BotsPage() {
 
         {showCreateForm && (
           <div className="mb-6 bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">Create New Bot</h2>
+            <h2 className="text-lg font-semibold mb-2">Create a Golden Ticket</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Issue an access credential for a bot you already use (like your assistant, a custom GPT, or a bot running on your laptop).
+            </p>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
@@ -170,7 +176,7 @@ export default function BotsPage() {
                   disabled={creating}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {creating ? 'Creating...' : 'Create & Generate Key'}
+                  {creating ? 'Issuing...' : 'Issue Golden Ticket'}
                 </button>
                 <button
                   type="button"
@@ -187,7 +193,8 @@ export default function BotsPage() {
         <div className="bg-white shadow rounded-lg overflow-hidden">
           {bots.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
-              No bots yet. Create your first bot to get started.
+              <p className="mb-2">No Golden Tickets issued yet.</p>
+              <p className="text-sm">Create a ticket for your existing bot to let it through the door.</p>
             </div>
           ) : (
             <table className="min-w-full divide-y divide-gray-200">
@@ -232,7 +239,7 @@ export default function BotsPage() {
                         onClick={() => deleteBot(bot.id)}
                         className="text-red-600 hover:text-red-900"
                       >
-                        Delete
+                        Revoke
                       </button>
                     </td>
                   </tr>
