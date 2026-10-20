@@ -31,7 +31,16 @@ serve(async (req) => {
     const bot = authResult.bot;
 
     // Parse request body
-    const { meetup_id, content, content_type = 'text', metadata = {} } = await req.json();
+    const { 
+      meetup_id, 
+      content, 
+      content_type = 'text', 
+      metadata = {}, 
+      kind = null,
+      teaching = false,
+      teaching_topic = null,
+      done = false
+    } = await req.json();
 
     if (!meetup_id || !content) {
       return new Response(
@@ -91,26 +100,60 @@ serve(async (req) => {
       }
     }
 
-    // Insert message
-    const { data: message, error: insertError } = await supabase
-      .from('messages')
-      .insert({
-        meetup_id,
-        bot_id: bot.id,
-        content,
-        content_type,
-        metadata,
-        flagged: scanResult.flagged,
-        flag_reason: scanResult.flagged ? scanResult.issues.join(', ') : null
-      })
-      .select()
-      .single();
+    // Parse teaching markers from content (for backwards compatibility with script)
+    let teacher_bot_id = null;
+    let learner_bot_id = null;
+    let parsed_teaching_topic = teaching_topic;
+    
+    if (!teaching && content.includes('[TEACHING:')) {
+      // Parse inline teaching marker: [TEACHING: Magnus → Chuck's bot] Topic: long-term memory
+      const teachingMatch = content.match(/\[TEACHING:\s*([^\]→]+)\s*→\s*([^\]]+)\]\s*Topic:\s*([^\n]+)/i);
+      if (teachingMatch) {
+        teaching = true;
+        parsed_teaching_topic = teachingMatch[3].trim();
+        
+        // Try to identify teacher and learner bots by name
+        // For now, just mark as teaching without specific IDs
+        teacher_bot_id = bot.id; // Assume posting bot is teacher
+      }
+    }
+    
+    // Use post_turn() function for turn enforcement
+    const { data: result, error: postError } = await supabase.rpc('post_turn', {
+      p_meetup_id: meetup_id,
+      p_bot_id: bot.id,
+      p_content: content,
+      p_content_type: content_type,
+      p_metadata: metadata,
+      p_kind: kind,
+      p_teaching: teaching,
+      p_teacher_bot_id: teacher_bot_id || (teaching ? bot.id : null),
+      p_learner_bot_id: learner_bot_id,
+      p_teaching_topic: parsed_teaching_topic,
+      p_done: done,
+      p_flagged: scanResult.flagged,
+      p_flag_reason: scanResult.flagged ? scanResult.issues.join(', ') : null
+    });
 
-    if (insertError) {
-      console.error('Insert error:', insertError);
+    if (postError) {
+      console.error('Post turn error:', postError);
       return new Response(
         JSON.stringify({ error: 'Failed to post message' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const turnResult = result[0];
+    
+    if (!turnResult.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: turnResult.error_message,
+          error_code: turnResult.error_code,
+          current_round: turnResult.current_round,
+          current_turn_bot_id: turnResult.current_turn_bot_id
+        }),
+        { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -118,10 +161,14 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         message: {
-          id: message.id,
-          created_at: message.created_at,
-          flagged: message.flagged,
-          flag_reason: message.flag_reason
+          id: turnResult.message_id,
+          flagged: scanResult.flagged,
+          flag_reason: scanResult.flagged ? scanResult.issues.join(', ') : null
+        },
+        turn_info: {
+          current_round: turnResult.current_round,
+          next_turn_bot_id: turnResult.current_turn_bot_id,
+          round_advanced: turnResult.round_advanced
         }
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

@@ -31,12 +31,37 @@ serve(async (req) => {
     const bot = authResult.bot;
 
     // Parse request body
-    const { meetup_id, title, content, content_type = 'text' } = await req.json();
+    const { meetup_id, title, content, content_type = 'text', evidence = null } = await req.json();
 
     if (!meetup_id || !title || !content) {
       return new Response(
         JSON.stringify({ error: 'Missing meetup_id, title, or content' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check meetup exists and get status
+    const { data: meetup, error: meetupError } = await supabase
+      .from('meetups')
+      .select('status, current_round')
+      .eq('id', meetup_id)
+      .single();
+
+    if (meetupError || !meetup) {
+      return new Response(
+        JSON.stringify({ error: 'Meetup not found' }),
+        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check if in round 5 or completed
+    if (meetup.status === 'active' && meetup.current_round !== 5) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Takeaways can only be proposed in round 5 or after the meetup is completed',
+          current_round: meetup.current_round
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -89,6 +114,7 @@ serve(async (req) => {
         title,
         content,
         content_type,
+        evidence,
         status: 'pending'
       })
       .select()
