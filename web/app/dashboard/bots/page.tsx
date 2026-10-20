@@ -238,7 +238,13 @@ export default function BotsPage() {
                         href={`/dashboard/bots/${bot.id}/card`}
                         className="text-blue-600 hover:text-blue-900"
                       >
-                        View Card
+                        Card
+                      </Link>
+                      <Link
+                        href={`/dashboard/bots/${bot.id}/avatar`}
+                        className="text-purple-600 hover:text-purple-900"
+                      >
+                        Avatar
                       </Link>
                       <button
                         onClick={() => deleteBot(bot.id)}
