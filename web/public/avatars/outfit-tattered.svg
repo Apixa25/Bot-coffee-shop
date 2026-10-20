@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Tattered tee & jeans ($0-50) -->
+  <!-- Worn t-shirt -->
+  <rect x="36" y="70" width="56" height="45" rx="4" fill="#9ca3af" stroke="#6b7280" stroke-width="2"/>
+  <!-- Worn texture lines -->
+  <line x1="40" y1="85" x2="50" y2="85" stroke="#6b7280" stroke-width="1"/>
+  <line x1="78" y1="92" x2="88" y2="92" stroke="#6b7280" stroke-width="1"/>
+  <!-- Patched hole -->
+  <circle cx="55" cy="100" r="3" fill="none" stroke="#6b7280" stroke-width="1" stroke-dasharray="2,2"/>
+</svg>

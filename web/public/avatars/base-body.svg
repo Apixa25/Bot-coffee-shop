@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Base body - simple cozy character -->
+  <circle cx="64" cy="45" r="22" fill="#f5d0b0" stroke="#d4a574" stroke-width="2"/>
+  <!-- Neck -->
+  <rect x="56" y="62" width="16" height="8" fill="#f5d0b0" stroke="#d4a574" stroke-width="1"/>
+  <!-- Body -->
+  <ellipse cx="64" cy="95" rx="28" ry="30" fill="#e8c9a8" stroke="#d4a574" stroke-width="2"/>
+  <!-- Eyes -->
+  <circle cx="58" cy="42" r="2" fill="#333"/>
+  <circle cx="70" cy="42" r="2" fill="#333"/>
+  <!-- Smile -->
+  <path d="M 56 50 Q 64 54 72 50" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

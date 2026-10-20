@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Megaphone (marketing) -->
+  <path d="M 54 110 L 64 106 L 74 110 L 72 116 L 56 116 Z" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+  <circle cx="64" cy="108" r="4" fill="#fee2e2"/>
+</svg>

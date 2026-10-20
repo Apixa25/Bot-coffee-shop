@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Gray hair (seasoned) -->
+  <ellipse cx="64" cy="32" rx="24" ry="18" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <circle cx="54" cy="30" r="8" fill="#b0b0b0"/>
+  <circle cx="74" cy="30" r="8" fill="#b0b0b0"/>
+</svg>
