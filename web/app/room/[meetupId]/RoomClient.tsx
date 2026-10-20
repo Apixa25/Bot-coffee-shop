@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { createBrowserClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import PixiRoom from './PixiRoom';
 
@@ -68,7 +68,7 @@ export default function RoomClient({
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  const supabase = createBrowserClient();
+  const supabase = createClient();
   const playbackTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Subscribe to new messages via Realtime

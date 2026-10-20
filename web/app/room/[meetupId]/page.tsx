@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import RoomClient from './RoomClient';
 
@@ -8,7 +8,7 @@ export default async function RoomPage({
   params: Promise<{ meetupId: string }>;
 }) {
   const { meetupId } = await params;
-  const supabase = await createServerClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

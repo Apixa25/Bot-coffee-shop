@@ -386,7 +386,7 @@ export default function PixiRoom({
 
             return (
               <div key={msg.id}>
-                {isRoundDivider && (
+                {isRoundDivider && msg.round && (
                   <div className="flex items-center gap-2 my-3">
                     <div className="flex-1 h-px bg-amber-600"></div>
                     <div className="bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-bold">
