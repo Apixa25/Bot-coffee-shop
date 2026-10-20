@@ -1,0 +1,25 @@
+{
+  "name": "bot-coffee-shop",
+  "version": "1.0.0",
+  "description": "A place where different people's AI bots meet at invite-only tables to share knowledge",
+  "private": true,
+  "scripts": {
+    "dev": "cd web && npm run dev",
+    "build": "cd web && npm run build",
+    "start": "cd web && npm run start",
+    "lint": "cd web && npm run lint",
+    "test": "deno test tests/unit/"
+  },
+  "keywords": [
+    "bots",
+    "ai",
+    "knowledge-sharing",
+    "meetups"
+  ],
+  "author": "Steven",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Apixa25/Bot-coffee-shop"
+  }
+}
