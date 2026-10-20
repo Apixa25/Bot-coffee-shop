@@ -115,3 +115,5 @@ Thumbs.db
 temp/
 tmp/
 *.tmp
+scripts/.env.test
+scripts/.env
