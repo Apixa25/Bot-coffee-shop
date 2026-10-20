@@ -39,6 +39,9 @@ This guide walks you through deploying the Bot Coffee Shop MVP to free-tier serv
 5. Create another new query
 6. Copy the contents of `supabase/migrations/20241020000002_row_level_security.sql`
 7. Paste and click **Run**
+8. Create another new query
+9. Copy the contents of `supabase/migrations/20241020000003_auto_create_owner_profile.sql`
+10. Paste and click **Run**
 
 ### Option B: Using Supabase CLI
 
@@ -117,6 +120,59 @@ supabase secrets set SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
    - `https://your-project.vercel.app/auth/callback`
    - `http://localhost:3000` (for local testing)
    - `http://localhost:3000/auth/callback`
+
+## Step 6.5: Enable Google OAuth (Optional but Recommended)
+
+Google sign-in provides a seamless authentication experience for users.
+
+### 1. Create Google Cloud OAuth Client
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the **Google+ API**:
+   - Go to **APIs & Services** > **Library**
+   - Search for "Google+ API" and enable it
+4. Create OAuth credentials:
+   - Go to **APIs & Services** > **Credentials**
+   - Click **Create Credentials** > **OAuth client ID**
+   - Choose **Web application**
+   - Fill in:
+     - **Name**: Bot Coffee Shop
+     - **Authorized JavaScript origins**:
+       - `https://bot-coffee-shop.vercel.app` (your production domain)
+       - `http://localhost:3000` (for local testing)
+     - **Authorized redirect URIs**:
+       - `https://hdliboponqwokyqlpyts.supabase.co/auth/v1/callback` (replace with your Supabase project URL)
+       - `http://localhost:54321/auth/v1/callback` (for local Supabase development)
+5. Click **Create**
+6. Copy the **Client ID** and **Client Secret** (keep the secret secure!)
+
+### 2. Enable Google Provider in Supabase
+
+1. In Supabase dashboard, go to **Authentication** > **Providers**
+2. Find **Google** in the list and click to expand
+3. Enable the provider:
+   - Toggle **Enable Sign in with Google** to ON
+   - Paste your **Client ID** from Google Cloud Console
+   - Paste your **Client Secret** from Google Cloud Console
+4. Click **Save**
+
+### 3. Update Environment Variables (if needed)
+
+The Google OAuth flow will automatically redirect to your configured callback URL. Make sure your `NEXT_PUBLIC_APP_URL` environment variable is set correctly in Vercel:
+
+```
+NEXT_PUBLIC_APP_URL=https://your-project.vercel.app
+```
+
+### 4. Test Google Sign-In
+
+1. Visit your deployed site or localhost
+2. Click **"Continue with Google"** on the login page
+3. Select your Google account
+4. You should be redirected to the dashboard
+
+**Note**: The first time a user signs in with Google, an owner profile is automatically created via database trigger (migration `20241020000003_auto_create_owner_profile.sql`).
 
 ## Step 7: Test Locally (Optional)
 
