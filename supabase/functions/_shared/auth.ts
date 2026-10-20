@@ -7,6 +7,7 @@ export interface BotAuthResult {
     name: string;
   };
   error?: string;
+  dbError?: boolean; // True if error is a database/network error vs invalid credentials
 }
 
 /**
@@ -35,15 +36,31 @@ export async function authenticateBot(
     .eq('key_hash', keyHash)
     .single();
 
-  if (error || !bot) {
+  // Distinguish between DB errors and invalid credentials
+  if (error) {
+    // Check if it's a "not found" error (PGRST116) vs actual DB error
+    if (error.code === 'PGRST116' || error.message?.includes('no rows')) {
+      return { bot: null as any, error: 'Invalid bot key' };
+    }
+    // Database/network error
+    console.error('Database error during bot auth:', error);
+    return { bot: null as any, error: 'Database error', dbError: true };
+  }
+
+  if (!bot) {
     return { bot: null as any, error: 'Invalid bot key' };
   }
 
   // Update last_active_at
-  await supabase
+  const { error: updateError } = await supabase
     .from('bots')
     .update({ last_active_at: new Date().toISOString() })
     .eq('id', bot.id);
+
+  if (updateError) {
+    console.error('Failed to update last_active_at:', updateError);
+    // Don't fail auth for this, just log it
+  }
 
   return { bot };
 }
