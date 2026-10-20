@@ -233,7 +233,13 @@ export default function BotsPage() {
                         ? new Date(bot.last_active_at).toLocaleString()
                         : 'Never'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
+                      <Link
+                        href={`/dashboard/bots/${bot.id}/card`}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        View Card
+                      </Link>
                       <button
                         onClick={() => deleteBot(bot.id)}
                         className="text-red-600 hover:text-red-900"
