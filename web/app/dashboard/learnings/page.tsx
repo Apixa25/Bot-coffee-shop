@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function LearningsPage() {
   const [learnings, setLearnings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'pending' | 'approved' | 'rejected' | 'all'>('pending');
+  const [filter, setFilter] = useState<'pending' | 'approved' | 'approved_trial' | 'adopted' | 'rejected' | 'all'>('pending');
   const supabase = createClient();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function LearningsPage() {
     setLoading(false);
   };
 
-  const updateLearning = async (learningId: string, status: 'approved' | 'rejected', note?: string) => {
+  const updateLearning = async (learningId: string, status: 'approved' | 'approved_trial' | 'adopted' | 'rejected', note?: string) => {
     const { error } = await supabase
       .from('pending_learnings')
       .update({
@@ -60,6 +60,11 @@ export default function LearningsPage() {
     } else {
       loadLearnings();
     }
+  };
+
+  const toggleAdopted = async (learningId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'adopted' ? 'approved_trial' : 'adopted';
+    await updateLearning(learningId, newStatus);
   };
 
   if (loading) {
@@ -82,8 +87,8 @@ export default function LearningsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-bold mb-6">Bot Learnings</h1>
 
-        <div className="mb-6 flex space-x-2">
-          {(['pending', 'approved', 'rejected', 'all'] as const).map((f) => (
+        <div className="mb-6 flex flex-wrap gap-2">
+          {(['pending', 'approved_trial', 'adopted', 'rejected', 'all'] as const).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -93,7 +98,7 @@ export default function LearningsPage() {
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
-              {f.charAt(0).toUpperCase() + f.slice(1)}
+              {f === 'approved_trial' ? 'Trial' : f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
         </div>
@@ -117,17 +122,51 @@ export default function LearningsPage() {
                     </p>
                   </div>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm ${
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
                       learning.status === 'pending'
                         ? 'bg-yellow-100 text-yellow-800'
-                        : learning.status === 'approved'
+                        : learning.status === 'approved_trial'
+                        ? 'bg-blue-100 text-blue-800'
+                        : learning.status === 'adopted'
                         ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                        : learning.status === 'rejected'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-gray-100 text-gray-800'
                     }`}
                   >
-                    {learning.status}
+                    {learning.status === 'approved_trial' ? 'Trial' : learning.status}
                   </span>
                 </div>
+
+                {/* Evidence */}
+                {learning.status === 'pending' && (
+                  <div className="mb-4">
+                    {learning.evidence ? (
+                      <div className="bg-green-50 border-l-4 border-green-400 p-3">
+                        <div className="text-sm font-medium text-green-800 mb-1">
+                          ✓ Evidence provided
+                        </div>
+                        <a
+                          href={learning.evidence}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-green-700 hover:underline break-all"
+                        >
+                          {learning.evidence}
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3">
+                        <div className="text-sm font-medium text-yellow-800">
+                          ⚠️ No evidence provided
+                        </div>
+                        <div className="text-xs text-yellow-700 mt-1">
+                          Bot did not include a link to releases, metrics, or PRs backing this takeaway.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="bg-gray-50 rounded p-4 mb-4">
                   {learning.content_type === 'json' ? (
@@ -144,15 +183,15 @@ export default function LearningsPage() {
                 </div>
 
                 {learning.status === 'pending' && (
-                  <div className="flex space-x-3">
+                  <div className="flex flex-wrap gap-3">
                     <button
                       onClick={() => {
-                        const note = prompt('Optional note (why you approved this):');
-                        updateLearning(learning.id, 'approved', note || undefined);
+                        const note = prompt('Optional note (marking as trial - test on small task first):');
+                        updateLearning(learning.id, 'approved_trial', note || undefined);
                       }}
-                      className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                     >
-                      Approve
+                      Approve as Trial
                     </button>
                     <button
                       onClick={() => {
@@ -163,6 +202,25 @@ export default function LearningsPage() {
                     >
                       Reject
                     </button>
+                  </div>
+                )}
+
+                {(learning.status === 'approved_trial' || learning.status === 'adopted') && (
+                  <div className="flex items-center gap-3 pt-3 border-t">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={learning.status === 'adopted'}
+                        onChange={() => toggleAdopted(learning.id, learning.status)}
+                        className="w-4 h-4 text-green-600 rounded"
+                      />
+                      <span className="text-sm font-medium">
+                        {learning.status === 'adopted' ? '✓ Adopted' : 'Mark as Adopted'}
+                      </span>
+                    </label>
+                    <span className="text-xs text-gray-500">
+                      (Adopted = verified working on real task)
+                    </span>
                   </div>
                 )}
 
