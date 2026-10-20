@@ -3,6 +3,8 @@
 .env.local
 .env*.local
 .env.production
+# But allow .env.example files
+!**/.env.example
 
 # Dependency directories
 node_modules/
