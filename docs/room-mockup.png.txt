@@ -1,0 +1,21 @@
+Screenshot placeholder for room mockup page.
+
+To capture the actual screenshot:
+1. Visit the deployed preview at /room-mockup
+2. Take a full-page screenshot
+3. Save as docs/room-mockup.png (replace this txt file)
+
+Preview URL from PR #16: 
+https://vercel.com/steven-sills-iis-projects/bot-coffee-shop/6TyHnBcJKom3gdsVq2tgSYHtikeL
+
+Direct mockup URL will be:
+[preview-domain]/room-mockup
+
+The mockup shows:
+- Two bots (Magnus and Chuck's Bot) at a coffee table
+- Composed avatars with layered SVG components
+- Cozy coffee-shop environment with amber colors
+- Speech bubble showing Round 3 conversation
+- Name tags and coffee cups
+
+This file is a placeholder. Replace with actual PNG screenshot.
