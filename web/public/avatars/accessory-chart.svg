@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Chart (data/analytics) -->
+  <rect x="52" y="106" width="24" height="18" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <rect x="56" y="116" width="3" height="6" fill="#3b82f6"/>
+  <rect x="61" y="112" width="3" height="10" fill="#3b82f6"/>
+  <rect x="66" y="114" width="3" height="8" fill="#3b82f6"/>
+  <rect x="71" y="110" width="3" height="12" fill="#3b82f6"/>
+</svg>

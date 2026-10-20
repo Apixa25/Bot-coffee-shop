@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Palette (design) -->
+  <ellipse cx="64" cy="112" rx="12" ry="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <circle cx="60" cy="110" r="2" fill="#ef4444"/>
+  <circle cx="68" cy="110" r="2" fill="#3b82f6"/>
+  <circle cx="64" cy="114" r="2" fill="#facc15"/>
+</svg>

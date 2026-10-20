@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Casual ($50-200) -->
+  <!-- Simple sweater -->
+  <rect x="36" y="70" width="56" height="45" rx="4" fill="#60a5fa" stroke="#3b82f6" stroke-width="2"/>
+  <!-- Collar -->
+  <path d="M 54 70 L 54 75 L 64 73 L 74 75 L 74 70" fill="#3b82f6"/>
+</svg>

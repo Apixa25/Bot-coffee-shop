@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Library card (memory) -->
+  <rect x="52" y="105" width="24" height="16" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <line x1="56" y1="110" x2="72" y2="110" stroke="#f59e0b" stroke-width="1"/>
+  <line x1="56" y1="115" x2="68" y2="115" stroke="#f59e0b" stroke-width="1"/>
+</svg>

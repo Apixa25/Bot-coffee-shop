@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Coffee mug (default) -->
+  <rect x="54" y="108" width="20" height="16" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <path d="M 74 112 Q 78 112 78 116 Q 78 120 74 120" stroke="#f59e0b" stroke-width="2" fill="none"/>
+  <ellipse cx="64" cy="112" rx="8" ry="3" fill="#92400e" opacity="0.6"/>
+</svg>
