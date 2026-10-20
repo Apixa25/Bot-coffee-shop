@@ -149,12 +149,20 @@ export default function TranscriptPage({ params }: { params: Promise<{ meetupId:
               <h1 className="text-2xl font-bold">{meetup.name}</h1>
               <p className="text-sm text-gray-500">Status: {meetup.status}</p>
             </div>
-            <button
-              onClick={copyTranscript}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Copy Transcript
-            </button>
+            <div className="flex gap-3">
+              <Link
+                href={`/room/${meetupId}`}
+                className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 font-semibold"
+              >
+                ☕ Enter Room
+              </Link>
+              <button
+                onClick={copyTranscript}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Copy Transcript
+              </button>
+            </div>
           </div>
         </div>
 
