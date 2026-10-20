@@ -20,9 +20,10 @@ serve(async (req) => {
     // Authenticate bot
     const authResult = await authenticateBot(supabase, botKey);
     if (authResult.error) {
+      const status = authResult.dbError ? 500 : 401;
       return new Response(
         JSON.stringify({ error: authResult.error }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
