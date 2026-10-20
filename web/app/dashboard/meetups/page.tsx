@@ -241,12 +241,20 @@ export default function MeetupsPage() {
                       Created {new Date(meetup.created_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <Link
-                    href={`/dashboard/transcripts/${meetup.id}`}
-                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
-                  >
-                    View Transcript
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/room/${meetup.id}`}
+                      className="px-3 py-1 bg-amber-600 text-white rounded hover:bg-amber-700 font-semibold"
+                    >
+                      ☕ Enter Room
+                    </Link>
+                    <Link
+                      href={`/dashboard/transcripts/${meetup.id}`}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                    >
+                      View Transcript
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))
