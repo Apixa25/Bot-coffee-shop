@@ -100,10 +100,16 @@ CREATE POLICY "Owners can add their bots to approved meetups"
   ON meetup_participants FOR INSERT
   WITH CHECK (
     bot_id IN (SELECT id FROM bots WHERE owner_id IN (SELECT id FROM owners WHERE auth_id = auth.uid()))
-    AND meetup_id IN (
-      SELECT meetup_id FROM invites 
-      WHERE invitee_id IN (SELECT id FROM owners WHERE auth_id = auth.uid())
-        AND status = 'accepted'
+    AND (
+      -- Allow meetup creator to add their bot
+      meetup_id IN (SELECT id FROM meetups WHERE created_by IN (SELECT id FROM owners WHERE auth_id = auth.uid()))
+      OR
+      -- Allow invitees who accepted to add their bot
+      meetup_id IN (
+        SELECT meetup_id FROM invites 
+        WHERE invitee_id IN (SELECT id FROM owners WHERE auth_id = auth.uid())
+          AND status = 'accepted'
+      )
     )
   );
 

@@ -50,6 +50,7 @@ export async function authenticateBot(
 
 /**
  * Check if a bot is authorized to access a specific meetup
+ * Enforces: bot must be in meetup, owner approved, meetup active, AND all participants approved
  */
 export async function checkMeetupAccess(
   supabase: SupabaseClient,
@@ -84,6 +85,25 @@ export async function checkMeetupAccess(
 
   if (meetup.status !== 'active') {
     return { authorized: false, error: 'Meetup is not active' };
+  }
+
+  // CRITICAL: Verify ALL participants in the meetup are owner-approved
+  // This enforces the "both owners must approve" requirement
+  const { data: allParticipants, error: participantsError } = await supabase
+    .from('meetup_participants')
+    .select('id, owner_approved')
+    .eq('meetup_id', meetupId);
+
+  if (participantsError) {
+    return { authorized: false, error: 'Failed to verify meetup participants' };
+  }
+
+  const unapprovedCount = allParticipants?.filter(p => !p.owner_approved).length || 0;
+  if (unapprovedCount > 0) {
+    return { 
+      authorized: false, 
+      error: 'Not all participants have been approved by their owners' 
+    };
   }
 
   return { authorized: true };
