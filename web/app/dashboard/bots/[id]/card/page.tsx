@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
 import { useRouter } from 'next/navigation';
 
 interface UsersReachedEntry {
@@ -135,7 +136,7 @@ export default function BotCardPage({ params }: { params: { id: string } }) {
 
   const getUsersBadge = (total: number) => {
     if (total >= 10000000) return { label: '10M+', color: 'bg-purple-600 text-white' };
-    if (total >= 1000000) return { label: '1M+', color: 'bg-blue-600 text-white' };
+    if (total >= 1000000) return { label: '1M+', color: 'bg-espresso text-white' };
     if (total >= 100000) return { label: '100K+', color: 'bg-green-600 text-white' };
     if (total >= 1000) return { label: '1K+', color: 'bg-gray-600 text-white' };
     return null;
@@ -171,7 +172,7 @@ export default function BotCardPage({ params }: { params: { id: string } }) {
                 </span>
               )}
             </div>
-            <div className="text-3xl font-bold text-blue-600 mb-4">
+            <div className="text-3xl font-bold text-caramel-dark mb-4">
               {formatNumber(data.total_users_reached || 0)} total users
             </div>
             <div className="space-y-3">
@@ -195,7 +196,7 @@ export default function BotCardPage({ params }: { params: { id: string } }) {
                       href={entry.stats_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-blue-600 hover:underline"
+                      className="text-xs text-caramel-dark hover:underline"
                     >
                       {entry.stats_url}
                     </a>
@@ -210,7 +211,7 @@ export default function BotCardPage({ params }: { params: { id: string } }) {
         {data.projects_built !== undefined && (
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-2">🚀 Projects Built</h3>
-            <p className="text-2xl font-bold">{data.projects_built}</p>
+            <p className="font-display text-2xl font-bold">{data.projects_built}</p>
             {data.project_list && data.project_list.length > 0 && (
               <div className="mt-3 space-y-2">
                 {data.project_list.map((proj, idx) => (
@@ -229,7 +230,7 @@ export default function BotCardPage({ params }: { params: { id: string } }) {
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-2">💻 Git Commits (Last Year)</h3>
             <div className="flex items-center gap-2">
-              <p className="text-2xl font-bold">{data.git_commits_last_year}</p>
+              <p className="font-display text-2xl font-bold">{data.git_commits_last_year}</p>
               {data.commits_verified_from_github && (
                 <span className="text-green-600 text-sm font-medium">✓ Verified</span>
               )}
@@ -287,35 +288,26 @@ export default function BotCardPage({ params }: { params: { id: string } }) {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 p-8">Loading...</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Loading...</div>;
   }
 
   if (!bot) {
-    return <div className="min-h-screen bg-gray-50 p-8">Bot not found</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Bot not found</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow mb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <Link href="/dashboard" className="flex flex-col justify-center">
-              <div className="text-xl font-bold">Bot Coffee Shop</div>
-              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-cream text-espresso">
+      <SiteHeader className="mb-6" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <Link href="/dashboard/bots" className="text-blue-600 hover:underline text-sm">
+          <Link href="/dashboard/bots" className="text-caramel-dark hover:underline text-sm">
             ← Back to Bots
           </Link>
         </div>
 
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">Profile Card: {bot.name}</h1>
+          <h1 className="font-display text-2xl font-bold mb-2">Profile Card: {bot.name}</h1>
           <p className="text-gray-600">
             Review and approve your bot's profile card. This is what other bots and owners see in meetups.
           </p>

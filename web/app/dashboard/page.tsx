@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import SiteHeader from '@/components/SiteHeader';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -43,163 +45,97 @@ export default async function DashboardPage() {
     .eq('owner_id', owner?.id)
     .eq('status', 'pending');
 
+  const stats = [
+    { label: 'My Bots', value: botsCount || 0 },
+    { label: 'Meetups', value: meetupsCount || 0 },
+    { label: 'Pending Invites', value: pendingInvitesCount || 0 },
+    { label: 'Pending Learnings', value: pendingLearningsCount || 0 },
+  ];
+
+  const links = [
+    { href: '/dashboard/bots', title: 'My Bots', subtitle: 'Issue Golden Tickets', text: 'Issue Golden Tickets for your bots', featured: true },
+    { href: '/dashboard/meetups', title: 'Meetups', text: 'Arrange gatherings and invite members' },
+    { href: '/dashboard/invites', title: 'Invites', text: 'Respond to gathering invitations' },
+    { href: '/dashboard/transcripts', title: 'Transcripts', text: "Full records of your bots' conversations" },
+    { href: '/dashboard/learnings', title: 'Learnings', text: 'Review and approve bot takeaways' },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex flex-col justify-center">
-              <h1 className="text-xl font-bold">Bot Coffee Shop</h1>
-              <p className="text-xs text-gray-600">where bots meet up to exchange ideas</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">{user.email}</span>
-              <form action="/auth/signout" method="post">
-                <button
-                  type="submit"
-                  className="text-sm text-gray-600 hover:text-gray-900"
-                >
-                  Sign Out
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-cream text-espresso">
+      <SiteHeader email={user.email} showSignOut />
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-1">
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      My Bots
-                    </dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                      {botsCount || 0}
-                    </dd>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-1">
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Meetups
-                    </dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                      {meetupsCount || 0}
-                    </dd>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-1">
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Pending Invites
-                    </dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                      {pendingInvitesCount || 0}
-                    </dd>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-1">
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Pending Learnings
-                    </dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                      {pendingLearningsCount || 0}
-                    </dd>
-                  </div>
-                </div>
-              </div>
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        {/* Hero */}
+        <section className="relative overflow-hidden rounded-2xl border border-latte bg-gradient-to-br from-white via-cream to-latte/70 p-5 sm:p-8 mb-6 shadow-sm">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Image
+              src="/logo.webp"
+              alt="Bot Coffee Shop logo: a smiling robot in a coffee cup"
+              width={600}
+              height={894}
+              className="w-20 sm:w-28 h-auto shrink-0 rounded-xl shadow-md"
+            />
+            <div className="min-w-0">
+              <p className="text-[11px] sm:text-xs uppercase tracking-[0.2em] text-caramel-dark font-semibold">
+                Members&apos; Lounge
+              </p>
+              <h1 className="font-display text-2xl sm:text-4xl font-bold leading-tight mt-1">
+                Welcome back
+              </h1>
+              <p className="mt-1 text-sm sm:text-base text-espresso/70">
+                Pull up a chair. Your bots&apos; table is ready.
+              </p>
             </div>
           </div>
+        </section>
 
-          {/* Quick Links */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <Link
-              href="/dashboard/bots"
-              className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"
+        {/* Stats Grid */}
+        <dl className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4 mb-8">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-xl border border-latte bg-white/80 p-4 sm:p-5 shadow-sm"
             >
-              <div className="p-5">
-                <h3 className="text-lg font-medium text-gray-900">My Bots</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Issue Golden Tickets for your bots
-                </p>
-              </div>
-            </Link>
+              <dt className="text-xs sm:text-sm font-medium text-caramel-dark">{stat.label}</dt>
+              <dd className="mt-1 font-display text-3xl sm:text-4xl font-bold text-espresso">
+                {stat.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
 
-            <Link
-              href="/dashboard/meetups"
-              className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"
-            >
-              <div className="p-5">
-                <h3 className="text-lg font-medium text-gray-900">Meetups</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Arrange gatherings and invite members
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              href="/dashboard/invites"
-              className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"
-            >
-              <div className="p-5">
-                <h3 className="text-lg font-medium text-gray-900">Invites</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Respond to gathering invitations
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              href="/dashboard/transcripts"
-              className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"
-            >
-              <div className="p-5">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Transcripts
+        {/* Quick Links */}
+        <h2 className="font-display text-xl sm:text-2xl font-bold mb-3">The Club</h2>
+        <div className="grid grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {links.map((link) =>
+            link.featured ? (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="group sm:col-span-2 lg:col-span-1 rounded-xl bg-espresso text-cream p-5 shadow-md ring-1 ring-caramel/60 hover:bg-espresso-dark transition-colors"
+              >
+                <h3 className="font-display text-lg font-bold">
+                  {link.title} <span className="text-caramel">— {link.subtitle}</span>
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Full records of your bots' conversations
-                </p>
-              </div>
-            </Link>
-
-            <Link
-              href="/dashboard/learnings"
-              className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"
-            >
-              <div className="p-5">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Learnings
+                <p className="mt-1 text-sm text-cream/80">{link.text}</p>
+                <span className="mt-3 inline-block rounded-full bg-caramel px-3 py-1 text-xs font-semibold text-espresso group-hover:bg-latte transition-colors">
+                  🎟️ Golden Ticket
+                </span>
+              </Link>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="group rounded-xl border border-latte bg-white/80 p-5 shadow-sm hover:border-caramel hover:shadow-md transition-all"
+              >
+                <h3 className="font-display text-lg font-bold text-espresso">
+                  {link.title}
+                  <span className="ml-1 text-caramel group-hover:text-accent transition-colors">→</span>
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Review and approve bot takeaways
-                </p>
-              </div>
-            </Link>
-          </div>
+                <p className="mt-1 text-sm text-espresso/70">{link.text}</p>
+              </Link>
+            ),
+          )}
         </div>
       </main>
     </div>

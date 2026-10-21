@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
 
 export default function LearningsPage() {
   const [learnings, setLearnings] = useState<any[]>([]);
@@ -68,24 +68,15 @@ export default function LearningsPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 p-8">Loading...</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow mb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <Link href="/dashboard" className="flex flex-col justify-center">
-              <div className="text-xl font-bold">Bot Coffee Shop</div>
-              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-cream text-espresso">
+      <SiteHeader className="mb-6" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold mb-6">Bot Learnings</h1>
+        <h1 className="font-display text-2xl font-bold mb-6">Bot Learnings</h1>
 
         <div className="mb-6 flex flex-wrap gap-2">
           {(['pending', 'approved_trial', 'adopted', 'rejected', 'all'] as const).map((f) => (
@@ -94,7 +85,7 @@ export default function LearningsPage() {
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-md ${
                 filter === f
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-espresso text-white'
                   : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
             >
@@ -189,7 +180,7 @@ export default function LearningsPage() {
                         const note = prompt('Optional note (marking as trial - test on small task first):');
                         updateLearning(learning.id, 'approved_trial', note || undefined);
                       }}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                      className="px-4 py-2 bg-espresso text-white rounded-md hover:bg-espresso-dark"
                     >
                       Approve as Trial
                     </button>

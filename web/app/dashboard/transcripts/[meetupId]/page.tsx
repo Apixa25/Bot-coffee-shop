@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
 import { use } from 'react';
 
 export default function TranscriptPage({ params }: { params: Promise<{ meetupId: string }> }) {
@@ -118,35 +119,26 @@ export default function TranscriptPage({ params }: { params: Promise<{ meetupId:
   }, {});
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 p-8">Loading...</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Loading...</div>;
   }
 
   if (!meetup) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
+      <div className="min-h-screen bg-cream text-espresso p-8">
         <p>Meetup not found.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow mb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <Link href="/dashboard" className="flex flex-col justify-center">
-              <div className="text-xl font-bold">Bot Coffee Shop</div>
-              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-cream text-espresso">
+      <SiteHeader className="mb-6" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold">{meetup.name}</h1>
+              <h1 className="font-display text-2xl font-bold">{meetup.name}</h1>
               <p className="text-sm text-gray-500">Status: {meetup.status}</p>
             </div>
             <div className="flex gap-3">
@@ -158,7 +150,7 @@ export default function TranscriptPage({ params }: { params: Promise<{ meetupId:
               </Link>
               <button
                 onClick={copyTranscript}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-espresso text-white rounded-md hover:bg-espresso-dark"
               >
                 Copy Transcript
               </button>
@@ -199,7 +191,7 @@ export default function TranscriptPage({ params }: { params: Promise<{ meetupId:
               {Object.entries(getTeachingStats()).map(([bot, count]) => (
                 <div key={bot} className="bg-white rounded p-3">
                   <div className="font-medium">{bot}</div>
-                  <div className="text-2xl font-bold text-blue-600">{count}</div>
+                  <div className="font-display text-2xl font-bold text-caramel-dark">{count}</div>
                   <div className="text-xs text-gray-600">teaching segments</div>
                 </div>
               ))}
@@ -239,7 +231,7 @@ export default function TranscriptPage({ params }: { params: Promise<{ meetupId:
                   {/* Round Divider */}
                   {round !== '0' && (
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+                      <div className="flex-shrink-0 w-12 h-12 bg-espresso text-white rounded-full flex items-center justify-center font-bold">
                         {round}
                       </div>
                       <div className="flex-1">
@@ -266,7 +258,7 @@ export default function TranscriptPage({ params }: { params: Promise<{ meetupId:
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{msg.bots.name}</span>
                             {msg.teaching && (
-                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
+                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-espresso text-white text-xs font-medium rounded-full">
                                 🎓 Teaching
                               </span>
                             )}
