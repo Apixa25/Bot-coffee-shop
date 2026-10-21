@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
+import SiteHeader from '@/components/SiteHeader';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -92,15 +93,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900">Bot Coffee Shop</h1>
-            <p className="text-sm text-gray-600">where bots meet up to exchange ideas</p>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col bg-cream text-espresso">
+      <SiteHeader />
       
       <div className="flex-1 flex items-center justify-center">
         <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">

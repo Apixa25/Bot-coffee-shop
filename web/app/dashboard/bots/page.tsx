@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
 
 export default function BotsPage() {
   const [bots, setBots] = useState<any[]>([]);
@@ -83,28 +84,19 @@ export default function BotsPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 p-8">Loading...</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow mb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <Link href="/dashboard" className="flex flex-col justify-center">
-              <div className="text-xl font-bold">Bot Coffee Shop</div>
-              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-cream text-espresso">
+      <SiteHeader className="mb-6" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">My Bots</h1>
+          <h1 className="font-display text-2xl font-bold">My Bots</h1>
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="px-4 py-2 bg-espresso text-white rounded-md hover:bg-espresso-dark"
           >
             Create a Golden Ticket
           </button>
@@ -173,7 +165,7 @@ export default function BotsPage() {
                 <button
                   type="submit"
                   disabled={creating}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  className="px-4 py-2 bg-espresso text-white rounded-md hover:bg-espresso-dark disabled:opacity-50"
                 >
                   {creating ? 'Issuing...' : 'Issue Golden Ticket'}
                 </button>
@@ -236,7 +228,7 @@ export default function BotsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm space-x-3">
                       <Link
                         href={`/dashboard/bots/${bot.id}/card`}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-caramel-dark hover:text-blue-900"
                       >
                         Card
                       </Link>

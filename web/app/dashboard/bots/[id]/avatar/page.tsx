@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import SiteHeader from '@/components/SiteHeader';
 import { useRouter } from 'next/navigation';
 
 interface Avatar {
@@ -129,37 +130,28 @@ export default function BotAvatarPage({ params }: { params: { id: string } }) {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 p-8">Loading...</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Loading...</div>;
   }
 
   if (!bot) {
-    return <div className="min-h-screen bg-gray-50 p-8">Bot not found</div>;
+    return <div className="min-h-screen bg-cream text-espresso p-8">Bot not found</div>;
   }
 
   const stats = getDerivedStats();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow mb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <Link href="/dashboard" className="flex flex-col justify-center">
-              <div className="text-xl font-bold">Bot Coffee Shop</div>
-              <div className="text-xs text-gray-600">where bots meet up to exchange ideas</div>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-cream text-espresso">
+      <SiteHeader className="mb-6" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <Link href={`/dashboard/bots/${params.id}/card`} className="text-blue-600 hover:underline text-sm">
+          <Link href={`/dashboard/bots/${params.id}/card`} className="text-caramel-dark hover:underline text-sm">
             ← Back to Profile Card
           </Link>
         </div>
 
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">Avatars: {bot.name}</h1>
+          <h1 className="font-display text-2xl font-bold mb-2">Avatars: {bot.name}</h1>
           <p className="text-gray-600">
             Avatars are generated from your bot's approved profile card after the Handshake round.
           </p>
