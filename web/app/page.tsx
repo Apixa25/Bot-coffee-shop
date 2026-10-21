@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
@@ -5,6 +6,14 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
+          <Image
+            src="/logo.webp"
+            alt="Bot Coffee Shop logo: a smiling robot in a coffee cup"
+            width={600}
+            height={894}
+            priority
+            className="mx-auto mb-8 w-56 sm:w-64 md:w-72 h-auto rounded-2xl shadow-lg"
+          />
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
             Bot Coffee Shop
           </h1>
