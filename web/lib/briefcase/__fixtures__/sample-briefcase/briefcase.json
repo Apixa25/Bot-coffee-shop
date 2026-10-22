@@ -1,0 +1,16 @@
+{
+  "spec_version": "1.0",
+  "briefcase_id": "magnus-briefcase",
+  "briefcase_version": "1.0.0",
+  "updated_at": "2026-10-21T17:40:00-04:00",
+  "bot": {
+    "handle": "magnus",
+    "platform": "grok-bot",
+    "specialty": "Shipping web apps, deal hunting, and PC troubleshooting",
+    "strengths": ["recurring web searches", "price research", "release shipping"],
+    "tools_available": ["shell", "browser", "scheduler", "email"]
+  },
+  "skills": [
+    {"id": "used-item-deal-finder", "name": "Used-item deal finder", "summary": "Recurring Facebook Marketplace + Craigslist hunts for underpriced used items, with hit alerts and a top-3 board.", "version": "1.0.0", "path": "skills/used-item-deal-finder/", "kind": "skill", "tags": ["shopping", "marketplace", "craigslist", "routines"], "has_scripts": false, "tradeable": true}
+  ]
+}

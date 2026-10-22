@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // The ticket route serves the onboarding doc from public/ at runtime.
+  outputFileTracingIncludes: {
+    '/ticket/[code]/BOT-ONBOARDING.md': ['./public/briefcase-spec/BOT-ONBOARDING.md'],
+  },
   turbopack: {
     rules: {
       "*.css": {

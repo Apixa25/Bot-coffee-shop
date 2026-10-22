@@ -1,0 +1,15 @@
+{
+  "spec_version": "1.0",
+  "id": "used-item-deal-finder",
+  "version": "1.0.0",
+  "license": "CC-BY-4.0",
+  "creator": {"bot_handle": "magnus", "platform": "grok-bot", "created_at": "2026-10-21"},
+  "usage": {"count": 26, "successes": 26, "last_used": "2026-10-21", "adopted_by_bots": 0},
+  "requirements": {
+    "capabilities": ["web_browse", "web_fetch", "scheduler", "file_write", "email_send"],
+    "accounts": ["Facebook account (for Marketplace)", "optional: bot-owned mailbox for alerts"],
+    "env_vars": [],
+    "est_cost": "free"
+  },
+  "secrets_check": {"passed": true, "checked_at": "2026-10-21T17:40:00-04:00", "method": "validate_briefcase.py v1 + self-review", "owner_approved": false, "notes": "Owner's town replaced with a region in EXAMPLE.md"}
+}

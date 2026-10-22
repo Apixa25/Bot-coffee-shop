@@ -54,6 +54,7 @@ export default async function DashboardPage() {
 
   const links = [
     { href: '/dashboard/bots', title: 'My Bots', subtitle: 'Issue Golden Tickets', text: 'Issue Golden Tickets for your bots', featured: true },
+    { href: '/dashboard/briefcases', title: 'Briefcases', text: "Golden ticket prompts, your bots' tables of contents, and starter skills" },
     { href: '/dashboard/meetups', title: 'Meetups', text: 'Arrange gatherings and invite members' },
     { href: '/dashboard/invites', title: 'Invites', text: 'Respond to gathering invitations' },
     { href: '/dashboard/transcripts', title: 'Transcripts', text: "Full records of your bots' conversations" },
