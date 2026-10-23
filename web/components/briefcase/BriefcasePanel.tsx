@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import BriefcaseIcon from './BriefcaseIcon';
 import { checkboxLabel, toggleSelection, type BotBriefcase } from '@/lib/briefcase/view';
+import { formatStats, formatStatsShort, isBrandNew, sortByUse } from '@/lib/briefcase/ratings';
 
 type View = 'cards' | 'list';
 
@@ -23,6 +24,7 @@ export default function BriefcasePanel({
   const [saved, setSaved] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const label = checkboxLabel(briefcase.isOwn);
+  const skills = sortByUse(briefcase.skills);
   const toggle = (id: string) => {
     setSaved(null);
     onChange(toggleSelection(selected, id));
@@ -94,18 +96,23 @@ export default function BriefcasePanel({
             <p className="text-center text-sm py-10 text-[#3B2A20]/70">This briefcase is empty for now. Bots can join with zero skills.</p>
           ) : view === 'cards' ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {briefcase.skills.map((s) => {
+              {skills.map((s) => {
                 const on = selected.has(s.id);
                 return (
                   <label
                     key={s.id}
-                    className={`block cursor-pointer rounded-2xl border-2 p-4 bg-white transition ${on ? 'border-[#2F7FD8] ring-2 ring-[#2F7FD8]/30' : 'border-[#EADBC4] hover:border-[#B08A55]'}`}
+                    data-testid="skill-card"
+                    className={`block rounded-2xl border-2 p-4 bg-white transition cursor-pointer ${on ? 'border-[#2F7FD8] ring-2 ring-[#2F7FD8]/30' : 'border-[#EADBC4] hover:border-[#B08A55]'}`}
                   >
                     <div className="flex items-start gap-3">
                       <input type="checkbox" className="mt-1 w-5 h-5 accent-[#2F7FD8]" checked={on} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} />
                       <div className="min-w-0">
-                        <h3 className="font-bold leading-snug" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>{s.name}</h3>
+                        <h3 className="font-bold leading-snug" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+                          {s.name}
+                          {isBrandNew(s.createdAt) && <span className="ml-2 align-middle text-[10px] font-sans font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-[#2F7FD8] text-white">Brand new</span>}
+                        </h3>
                         <p className="text-sm mt-1 text-[#3B2A20]/85">{s.description}</p>
+                        <p className="text-xs mt-1.5 font-semibold" data-testid="stats">{formatStats(s.stats)}</p>
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-1.5 text-[11px] font-semibold">
@@ -121,16 +128,22 @@ export default function BriefcasePanel({
             </div>
           ) : (
             <ul className="divide-y divide-[#EADBC4] bg-white rounded-2xl border-2 border-[#EADBC4]">
-              {briefcase.skills.map((s) => (
-                <li key={s.id}>
-                  <label className="flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-[#FBF5EA]">
-                    <input type="checkbox" className="w-5 h-5 accent-[#2F7FD8]" checked={selected.has(s.id)} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} />
-                    <span className="flex-1 min-w-0 truncate font-semibold text-sm">{s.name}</span>
-                    <span className="text-[11px] text-[#3B2A20]/70">{s.version}</span>
-                    <span title={s.tested === 'tested' ? 'Tested by another bot' : 'Not yet tested'} className="text-sm">{s.tested === 'tested' ? '✅' : '⏳'}</span>
-                  </label>
-                </li>
-              ))}
+              {skills.map((s) => {
+                return (
+                  <li key={s.id}>
+                    <label className={`flex items-center gap-2 sm:gap-3 px-3 py-2.5 cursor-pointer hover:bg-[#FBF5EA]`}>
+                      <input type="checkbox" className="w-5 h-5 accent-[#2F7FD8]" checked={selected.has(s.id)} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} />
+                      <span className="flex-1 min-w-0 truncate font-semibold text-sm">
+                        {s.name}
+                        {isBrandNew(s.createdAt) && <span className="ml-1.5 text-[9px] font-bold uppercase px-1 rounded bg-[#2F7FD8] text-white">new</span>}
+                      </span>
+                      <span className="hidden sm:inline text-[11px] text-[#3B2A20]/80 whitespace-nowrap">{formatStats(s.stats)}</span>
+                      <span className="sm:hidden text-[11px] whitespace-nowrap">{formatStatsShort(s.stats)}</span>
+                      <span className="text-[11px] text-[#3B2A20]/70">{s.version}</span>
+                    </label>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
@@ -143,7 +156,7 @@ export default function BriefcasePanel({
           <button
             onClick={saveInterest}
             disabled={selected.size === 0 || sending}
-            className="px-5 py-2.5 rounded-full bg-[#2F7FD8] text-white font-semibold disabled:opacity-40"
+            className="px-5 py-2.5 rounded-full bg-[#2F7FD8] text-white font-semibold"
           >
             {sending ? 'Sending…' : 'Send interest to owner for approval'}
           </button>

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import RoomClient from './RoomClient';
 import { cardsFromManifest, type BotBriefcase } from '@/lib/briefcase/view';
+import { statsFromRow, EMPTY_STATS } from '@/lib/briefcase/ratings';
 
 export default async function RoomPage({
   params,
@@ -82,11 +83,18 @@ export default async function RoomPage({
   const tocByBot = new Map(
     ((briefcaseRows as { bot_id: string; skills: unknown }[] | null) || []).map((r) => [r.bot_id, { skills: r.skills }])
   );
+  const { data: statRows } = await supabase.rpc('get_skill_ratings', { p_bot_ids: botIds });
+  const statsByKey = new Map(
+    ((statRows as (Parameters<typeof statsFromRow>[0] & { source_bot_id: string; skill_id: string })[] | null) || []).map((r) => [`${r.source_bot_id}:${r.skill_id}`, statsFromRow(r)])
+  );
   const briefcases: BotBriefcase[] = meetup.meetup_participants.map((mb: any) => ({
     botId: mb.bot.id,
     botName: mb.bot.name,
     isOwn: mb.bot.owner.auth_id === user.id,
-    skills: cardsFromManifest(tocByBot.get(mb.bot.id)),
+    skills: cardsFromManifest(tocByBot.get(mb.bot.id)).map((s) => ({
+      ...s,
+      stats: statsByKey.get(`${mb.bot.id}:${s.id}`) ?? EMPTY_STATS,
+    })),
   }));
 
   return (

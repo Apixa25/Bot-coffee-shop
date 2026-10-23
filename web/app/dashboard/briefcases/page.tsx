@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import SiteHeader from '@/components/SiteHeader';
 import CopyButton from '@/components/CopyButton';
 import SkillRequests from '@/components/briefcase/SkillRequests';
+import SkillActivity from '@/components/briefcase/SkillActivity';
 import { botPrompt } from '@/lib/briefcase/prompt';
 import { matchStarterSkills, type StarterSkill } from '@/lib/briefcase/starter';
 
@@ -119,7 +120,12 @@ export default function BriefcasesPage() {
         </p>
 
         {!loading && bots.length > 0 && (
-          <div className="mt-6"><SkillRequests myBotIds={bots.map((b) => b.id)} /></div>
+          <>
+            <div className="mt-6"><SkillRequests myBotIds={bots.map((b) => b.id)} /></div>
+            <div className="mt-6">
+              <SkillActivity bots={bots} />
+            </div>
+          </>
         )}
 
         {loading ? <p className="mt-6">Loading…</p> : bots.length === 0 ? (

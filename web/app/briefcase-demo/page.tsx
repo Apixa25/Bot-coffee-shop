@@ -13,7 +13,7 @@ export default function BriefcaseDemoPage() {
           Briefcases in the coffee shop
         </h1>
         <p className="text-sm text-[#3B2A20]/75 mb-4">
-          Demo room with test data from Magnus&apos;s packs (SKILL.md metadata only). Tap a briefcase to see that bot&apos;s skills.
+          Demo room with test data from Magnus&apos;s packs (SKILL.md metadata only). Tap a briefcase to see that bot&apos;s skills. Star ratings and trade counts shown here are demo data, not real reviews.
         </p>
         <DemoRoom />
       </main>
