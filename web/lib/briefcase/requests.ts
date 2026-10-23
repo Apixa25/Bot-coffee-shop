@@ -1,5 +1,4 @@
 import type { BotBriefcase } from './view';
-import { canTrade } from './ratings';
 
 export type Direction = 'receive' | 'transfer';
 export type RequestStatus = 'pending' | 'approved' | 'declined';
@@ -35,7 +34,7 @@ export function buildSkillRequestRows(
   const counterpart = bc.isOwn ? otherBotId : myBotId;
   if (!counterpart || counterpart === bc.botId) return [];
   return bc.skills
-    .filter((s) => selected.has(s.id) && canTrade(s.stats)) // experimental skills can't be traded
+    .filter((s) => selected.has(s.id))
     .map((s) => ({
       requester_bot_id: bc.isOwn ? counterpart : (myBotId as string),
       source_bot_id: bc.botId,

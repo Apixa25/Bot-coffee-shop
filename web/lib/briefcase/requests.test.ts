@@ -4,11 +4,9 @@ import { cardFromSkillMd, cardsFromManifest, type BotBriefcase } from './view';
 import { MAGNUS_SKILLS } from './demo';
 import { validateBriefcase } from './validate';
 
-const used = { avgStars: null, reviewCount: 0, runCount: 3, evidence: [{ kind: 'pr' as const, url: 'https://github.com/a/b/pull/1', verified: true }], tier: 'used_by_owner' as const };
 const skills = [
-  { id: 'monitors', name: 'monitors', description: 'd', version: 'v0.1', sourceProject: 'x', tested: 'not_tested' as const, stats: used },
-  { id: 'deal-finder', name: 'Deal finder', description: 'd', version: 'v0.1', sourceProject: 'x', tested: 'not_tested' as const, stats: used },
-  { id: 'exp', name: 'Exp', description: 'd', version: 'v0.1', sourceProject: 'x', tested: 'not_tested' as const },
+  { id: 'monitors', name: 'monitors', description: 'd', version: 'v0.1', sourceProject: 'x', tested: 'not_tested' as const },
+  { id: 'deal-finder', name: 'Deal finder', description: 'd', version: 'v0.1', sourceProject: 'x', tested: 'not_tested' as const },
 ];
 const own: BotBriefcase = { botId: 'me', botName: 'Mine', isOwn: true, skills };
 const other: BotBriefcase = { botId: 'them', botName: 'Theirs', isOwn: false, skills };
@@ -24,9 +22,6 @@ describe('buildSkillRequestRows', () => {
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ requester_bot_id: 'them', source_bot_id: 'me', direction: 'transfer' });
     expect(approverBotId(rows[0])).toBe('them');
-  });
-  it('never builds requests for experimental skills', () => {
-    expect(buildSkillRequestRows(other, new Set(['exp']), 'me', 'them')).toEqual([]);
   });
   it('returns nothing without a counterpart bot', () => {
     expect(buildSkillRequestRows(own, new Set(['monitors']), 'me', null)).toEqual([]);

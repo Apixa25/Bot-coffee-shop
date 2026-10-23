@@ -2,19 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import BriefcaseIcon from './BriefcaseIcon';
-import { checkboxLabel, toggleSelection, type BotBriefcase, type SkillCard } from '@/lib/briefcase/view';
-import { TIER_LABEL, canTrade, formatStats, isBrandNew, sortByTier } from '@/lib/briefcase/ratings';
-
-const TIER_STYLE = {
-  verified: 'bg-green-100 text-green-800',
-  used_by_owner: 'bg-[#2F7FD8]/10 text-[#1d5fa8]',
-  experimental: 'bg-amber-100 text-amber-800',
-} as const;
-
-function TierBadge({ s }: { s: SkillCard }) {
-  const t = s.stats?.tier ?? 'experimental';
-  return <span data-testid="tier" className={`px-2 py-0.5 rounded-full ${TIER_STYLE[t]}`}>{t === 'verified' ? '🏅 ' : t === 'experimental' ? '🧪 ' : '🛠 '}{TIER_LABEL[t]}</span>;
-}
+import { checkboxLabel, toggleSelection, type BotBriefcase } from '@/lib/briefcase/view';
+import { formatStats, formatStatsShort, isBrandNew, sortByUse } from '@/lib/briefcase/ratings';
 
 type View = 'cards' | 'list';
 
@@ -35,7 +24,7 @@ export default function BriefcasePanel({
   const [saved, setSaved] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const label = checkboxLabel(briefcase.isOwn);
-  const skills = sortByTier(briefcase.skills);
+  const skills = sortByUse(briefcase.skills);
   const toggle = (id: string) => {
     setSaved(null);
     onChange(toggleSelection(selected, id));
@@ -109,15 +98,14 @@ export default function BriefcasePanel({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {skills.map((s) => {
                 const on = selected.has(s.id);
-                const tradable = canTrade(s.stats);
                 return (
                   <label
                     key={s.id}
                     data-testid="skill-card"
-                    className={`block rounded-2xl border-2 p-4 bg-white transition ${tradable ? 'cursor-pointer' : 'opacity-80'} ${on ? 'border-[#2F7FD8] ring-2 ring-[#2F7FD8]/30' : 'border-[#EADBC4] hover:border-[#B08A55]'}`}
+                    className={`block rounded-2xl border-2 p-4 bg-white transition cursor-pointer ${on ? 'border-[#2F7FD8] ring-2 ring-[#2F7FD8]/30' : 'border-[#EADBC4] hover:border-[#B08A55]'}`}
                   >
                     <div className="flex items-start gap-3">
-                      <input type="checkbox" className="mt-1 w-5 h-5 accent-[#2F7FD8] disabled:opacity-40" checked={on} disabled={!tradable} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} title={tradable ? label : 'Experimental skills cannot be traded yet'} />
+                      <input type="checkbox" className="mt-1 w-5 h-5 accent-[#2F7FD8]" checked={on} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} />
                       <div className="min-w-0">
                         <h3 className="font-bold leading-snug" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
                           {s.name}
@@ -128,24 +116,12 @@ export default function BriefcasePanel({
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-1.5 text-[11px] font-semibold">
-                      <TierBadge s={s} />
                       <span className="px-2 py-0.5 rounded-full bg-[#EADBC4]">{s.version}</span>
                       <span className="px-2 py-0.5 rounded-full bg-[#FBF5EA] border border-[#EADBC4]">📁 {s.sourceProject}</span>
                       <span className={`px-2 py-0.5 rounded-full ${s.tested === 'tested' ? 'bg-green-100 text-green-800' : 'bg-[#FBF5EA] border border-[#EADBC4] text-[#3B2A20]/70'}`}>
                         {s.tested === 'tested' ? `✓ Tested by ${s.testedBy || 'another bot'}` : 'Not yet tested by another bot'}
                       </span>
                     </div>
-                    {!!s.stats?.evidence.length && (
-                      <ul className="mt-2 space-y-0.5 text-[11px]">
-                        {s.stats.evidence.slice(0, 3).map((e) => (
-                          <li key={e.url} className="truncate">
-                            <span className={e.verified ? 'text-green-700' : 'text-[#3B2A20]/60'}>{e.verified ? '✓ verified' : '? unverified'}</span>{' '}
-                            <a href={e.url} target="_blank" rel="noreferrer" className="underline" onClick={(ev) => ev.stopPropagation()}>{e.kind}: {e.url.replace('https://github.com/', '')}</a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {!tradable && <p className="mt-2 text-[11px] text-amber-800">🧪 Experimental: can&apos;t be offered or approved in a trade until it has runs and evidence.</p>}
                   </label>
                 );
               })}
@@ -153,19 +129,16 @@ export default function BriefcasePanel({
           ) : (
             <ul className="divide-y divide-[#EADBC4] bg-white rounded-2xl border-2 border-[#EADBC4]">
               {skills.map((s) => {
-                const tradable = canTrade(s.stats);
-                const t = s.stats?.tier ?? 'experimental';
                 return (
                   <li key={s.id}>
-                    <label className={`flex items-center gap-2 sm:gap-3 px-3 py-2.5 ${tradable ? 'cursor-pointer hover:bg-[#FBF5EA]' : 'opacity-75'}`}>
-                      <input type="checkbox" className="w-5 h-5 accent-[#2F7FD8] disabled:opacity-40" checked={selected.has(s.id)} disabled={!tradable} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} />
+                    <label className={`flex items-center gap-2 sm:gap-3 px-3 py-2.5 cursor-pointer hover:bg-[#FBF5EA]`}>
+                      <input type="checkbox" className="w-5 h-5 accent-[#2F7FD8]" checked={selected.has(s.id)} onChange={() => toggle(s.id)} aria-label={`${label}: ${s.name}`} />
                       <span className="flex-1 min-w-0 truncate font-semibold text-sm">
                         {s.name}
                         {isBrandNew(s.createdAt) && <span className="ml-1.5 text-[9px] font-bold uppercase px-1 rounded bg-[#2F7FD8] text-white">new</span>}
                       </span>
                       <span className="hidden sm:inline text-[11px] text-[#3B2A20]/80 whitespace-nowrap">{formatStats(s.stats)}</span>
-                      <span className="sm:hidden text-[11px] whitespace-nowrap">{s.stats?.reviewCount ? `⭐${s.stats.avgStars?.toFixed(1)}` : ''} {s.stats?.runCount ? `×${s.stats.runCount}` : ''}</span>
-                      <span title={TIER_LABEL[t]} className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${TIER_STYLE[t]}`}>{t === 'verified' ? '🏅' : t === 'experimental' ? '🧪' : '🛠'}<span className="hidden sm:inline"> {TIER_LABEL[t]}</span></span>
+                      <span className="sm:hidden text-[11px] whitespace-nowrap">{formatStatsShort(s.stats)}</span>
                       <span className="text-[11px] text-[#3B2A20]/70">{s.version}</span>
                     </label>
                   </li>
@@ -183,7 +156,7 @@ export default function BriefcasePanel({
           <button
             onClick={saveInterest}
             disabled={selected.size === 0 || sending}
-            className="px-5 py-2.5 rounded-full bg-[#2F7FD8] text-white font-semibold disabled:opacity-40"
+            className="px-5 py-2.5 rounded-full bg-[#2F7FD8] text-white font-semibold"
           >
             {sending ? 'Sending…' : 'Send interest to owner for approval'}
           </button>

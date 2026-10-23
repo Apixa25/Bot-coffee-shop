@@ -83,7 +83,7 @@ export default async function RoomPage({
   const tocByBot = new Map(
     ((briefcaseRows as { bot_id: string; skills: unknown }[] | null) || []).map((r) => [r.bot_id, { skills: r.skills }])
   );
-  const { data: statRows } = await supabase.rpc('get_skill_stats', { p_bot_ids: botIds });
+  const { data: statRows } = await supabase.rpc('get_skill_ratings', { p_bot_ids: botIds });
   const statsByKey = new Map(
     ((statRows as (Parameters<typeof statsFromRow>[0] & { source_bot_id: string; skill_id: string })[] | null) || []).map((r) => [`${r.source_bot_id}:${r.skill_id}`, statsFromRow(r)])
   );

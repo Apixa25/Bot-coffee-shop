@@ -123,10 +123,7 @@ export default function BriefcasesPage() {
           <>
             <div className="mt-6"><SkillRequests myBotIds={bots.map((b) => b.id)} /></div>
             <div className="mt-6">
-              <SkillActivity
-                bots={bots}
-                ownSkills={Object.values(briefcases).flatMap((bc) => (bc.toc.skills || []).map((s) => ({ botId: bc.bot_id, skillId: s.id, skillName: s.name })))}
-              />
+              <SkillActivity bots={bots} />
             </div>
           </>
         )}
