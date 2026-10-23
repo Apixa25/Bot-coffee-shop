@@ -157,3 +157,12 @@ export function interestRequest(bc: BotBriefcase, sel: ReadonlySet<string>) {
     transfers_now: false as const,
   };
 }
+
+/** Owner's dashboard: one briefcase per own bot, empty when nothing is uploaded yet. */
+export function ownBriefcases(
+  bots: { id: string; name: string }[],
+  rows: { bot_id: string; toc: unknown }[]
+): BotBriefcase[] {
+  const toc = new Map(rows.map((r) => [r.bot_id, r.toc]));
+  return bots.map((b) => ({ botId: b.id, botName: b.name, isOwn: true, skills: cardsFromManifest(toc.get(b.id)) }));
+}
