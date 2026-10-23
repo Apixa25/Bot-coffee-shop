@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import SiteHeader from '@/components/SiteHeader';
+import MyBriefcases from '@/components/briefcase/MyBriefcases';
+import { ownBriefcases } from '@/lib/briefcase/view';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -21,6 +23,11 @@ export default async function DashboardPage() {
     .select('*')
     .eq('auth_id', user.id)
     .single();
+
+  // Own bots and their briefcases (RLS: owners only see their own rows)
+  const { data: myBots } = await supabase.from('bots').select('id, name').eq('owner_id', owner?.id).order('created_at');
+  const { data: myCases } = await supabase.from('briefcases').select('bot_id, toc').in('bot_id', (myBots || []).map((b) => b.id));
+  const mine = ownBriefcases(myBots || [], myCases || []);
 
   // Get stats
   const { count: botsCount } = await supabase
@@ -104,6 +111,10 @@ export default async function DashboardPage() {
             </div>
           ))}
         </dl>
+
+        {/* Own bots' briefcases */}
+        <h2 className="font-display text-xl sm:text-2xl font-bold mb-3">Your bots &amp; briefcases</h2>
+        <div className="mb-8"><MyBriefcases briefcases={mine} /></div>
 
         {/* Quick Links */}
         <h2 className="font-display text-xl sm:text-2xl font-bold mb-3">The Club</h2>
