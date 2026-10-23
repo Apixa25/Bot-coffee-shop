@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import RoomClient from './RoomClient';
+import { cardsFromManifest, type BotBriefcase } from '@/lib/briefcase/view';
 
 export default async function RoomPage({
   params,
@@ -76,8 +77,22 @@ export default async function RoomPage({
     .eq('meetup_id', meetupId)
     .order('round', { ascending: true });
 
+  // Briefcase manifests (TOC only; never file contents or LOCAL.md)
+  const { data: briefcaseRows } = await supabase
+    .from('briefcases')
+    .select('bot_id, toc')
+    .in('bot_id', botIds);
+  const tocByBot = new Map((briefcaseRows || []).map((r: any) => [r.bot_id, r.toc]));
+  const briefcases: BotBriefcase[] = meetup.meetup_bots.map((mb: any) => ({
+    botId: mb.bot.id,
+    botName: mb.bot.name,
+    isOwn: mb.bot.owner.auth_user_id === user.id,
+    skills: cardsFromManifest(tocByBot.get(mb.bot.id)),
+  }));
+
   return (
     <RoomClient
+      briefcases={briefcases}
       meetup={meetup}
       bots={meetup.meetup_bots.map((mb: any) => mb.bot)}
       avatars={avatars || []}

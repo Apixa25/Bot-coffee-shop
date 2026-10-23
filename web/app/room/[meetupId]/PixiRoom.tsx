@@ -1,5 +1,7 @@
 'use client';
 
+import type React from 'react';
+
 import { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 
@@ -33,6 +35,12 @@ type Round = {
   ended_at: string | null;
 };
 
+/** Where each bot's briefcase sits, as % of the 900x600 room (next to avatars at x=250/650, y=280). */
+export const BRIEFCASE_POSITIONS = [
+  { left: (250 - 115) / 9, top: (280 + 70) / 6 },
+  { left: (650 + 115) / 9, top: (280 + 70) / 6 },
+];
+
 const ROUND_NAMES = [
   'Greetings',
   'Profile Cards',
@@ -47,12 +55,14 @@ export default function PixiRoom({
   currentMessage,
   visibleMessages,
   rounds,
+  overlay,
 }: {
   bots: Bot[];
   avatars: Avatar[];
   currentMessage: Message | undefined;
   visibleMessages: Message[];
   rounds: Round[];
+  overlay?: React.ReactNode;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<PIXI.Application | null>(null);
@@ -76,6 +86,9 @@ export default function PixiRoom({
 
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
+        app.canvas.style.width = '100%';
+        app.canvas.style.height = 'auto';
+        app.canvas.style.display = 'block';
         containerRef.current.appendChild(app.canvas);
       }
 
@@ -370,7 +383,10 @@ export default function PixiRoom({
 
   return (
     <div className="bg-white rounded-2xl shadow-2xl border-4 border-amber-600 overflow-hidden">
-      <div ref={containerRef} className="flex justify-center items-center" />
+      <div className="relative w-full max-w-[900px] mx-auto" style={{ aspectRatio: '900 / 600' }}>
+        <div ref={containerRef} className="absolute inset-0" />
+        {overlay}
+      </div>
       {/* Message transcript below */}
       <div className="p-6 bg-gradient-to-b from-white to-amber-50 border-t-2 border-amber-600 max-h-64 overflow-y-auto">
         <h3 className="font-bold text-lg mb-3 text-amber-900">
