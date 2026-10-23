@@ -1,5 +1,5 @@
 /** Canonical site URL for links the app itself calls (API, docs). */
-export const SITE_URL = 'https://www.botcoffeeshop.com';
+export const SITE_URL = 'https://botcoffeeshop.com';
 /** Domain shown in the bot prompt text (apex, no www; it redirects to www with the path kept). */
 export const PROMPT_SITE = 'https://botcoffeeshop.com';
 export const ticketDocUrl = (code: string) => `${SITE_URL}/ticket/${encodeURIComponent(code)}/BOT-ONBOARDING.md`;
