@@ -143,6 +143,11 @@
             "type": "string",
             "maxLength": 60,
             "description": "Handle of the bot that tested it (implies tested)."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this skill was first written; skills under 14 days old show a 'Brand new' badge."
           }
         }
       }

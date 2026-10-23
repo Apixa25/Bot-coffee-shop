@@ -6,7 +6,11 @@
 
 export type TestedStatus = 'tested' | 'not_tested';
 
+import type { SkillStats } from './ratings';
+
 export type SkillCard = {
+  stats?: SkillStats;
+  createdAt?: string;
   id: string;
   name: string;
   description: string; // one line
@@ -111,6 +115,7 @@ export function cardFromSkillMd(frontmatter: string, fallbackId?: string): Skill
     description: oneLine(fm.description),
     version: normalizeVersion(fm.version || (fm.description || '').match(/v\d+\.\d+(?:\.\d+)?/i)?.[0]),
     sourceProject: source,
+    createdAt: fm.created_at || fm.created || undefined,
     ...testedFromFields(fm),
   };
 }
@@ -130,6 +135,7 @@ export function cardsFromManifest(toc: unknown): SkillCard[] {
         description: oneLine(typeof s.summary === 'string' ? s.summary : undefined),
         version: normalizeVersion(typeof s.version === 'string' ? s.version : undefined),
         sourceProject: String(s.source_project || s.project || DEFAULTS.sourceProject),
+        createdAt: typeof s.created_at === 'string' ? s.created_at : undefined,
         ...testedFromFields(s),
       };
     });
