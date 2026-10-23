@@ -165,6 +165,8 @@ export function ownBriefcases(
 ): BotBriefcase[] {
   const toc = new Map(rows.map((r) => [r.bot_id, r.toc]));
   return bots.map((b) => ({ botId: b.id, botName: b.name, isOwn: true, skills: cardsFromManifest(toc.get(b.id)) }));
+}
+
 /** Archive entry: safe fields only from get_archive(). Stars/traded are a hook until ratings land. */
 export type ArchiveSkill = SkillCard & { stars?: number | null; reviews?: number | null; traded?: number | null };
 export type ArchiveBot = { botId: string; botName: string; isOwn: boolean; skills: ArchiveSkill[] };
