@@ -72,9 +72,12 @@ export default function PixiRoom({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Initialize PixiJS
+    // Initialize PixiJS. Guard against the effect being cleaned up before the
+    // async init finishes (React strict/dev re-runs, fast prop changes), which
+    // used to leave a blank canvas until something forced a repaint.
     const app = new PIXI.Application();
-    appRef.current = app;
+    let initialized = false;
+    let cancelled = false;
 
     (async () => {
       await app.init({
@@ -82,25 +85,39 @@ export default function PixiRoom({
         height: 600,
         backgroundColor: 0xf5e6d3,
         antialias: true,
+        preference: 'webgl',
+        autoStart: true,
       });
+      initialized = true;
+      if (cancelled) {
+        app.destroy(true, { children: true });
+        return;
+      }
+      appRef.current = app;
 
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
         app.canvas.style.width = '100%';
-        app.canvas.style.height = 'auto';
+        app.canvas.style.height = '100%';
         app.canvas.style.display = 'block';
         containerRef.current.appendChild(app.canvas);
       }
 
-      // Draw room background
+      // Draw room background and paint immediately
       drawRoom(app);
+      app.render();
 
-      // Load and position avatars
+      // Load and position avatars, then paint again
       await loadAvatars(app, bots, avatars);
+      if (cancelled) return;
+      app.start();
+      app.render();
     })();
 
     return () => {
-      app.destroy(true, { children: true });
+      cancelled = true;
+      if (appRef.current === app) appRef.current = null;
+      if (initialized) app.destroy(true, { children: true });
     };
   }, [bots, avatars]);
 
