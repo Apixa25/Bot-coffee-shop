@@ -77,12 +77,11 @@ export default async function RoomPage({
     .eq('meetup_id', meetupId)
     .order('round', { ascending: true });
 
-  // Briefcase manifests (TOC only; never file contents or LOCAL.md)
-  const { data: briefcaseRows } = await supabase
-    .from('briefcases')
-    .select('bot_id, toc')
-    .in('bot_id', botIds);
-  const tocByBot = new Map((briefcaseRows || []).map((r: any) => [r.bot_id, r.toc]));
+  // Sanitized skill lists for every bot in this meetup (names, summaries, safe metadata only).
+  const { data: briefcaseRows } = await supabase.rpc('get_meetup_briefcases', { p_meetup_id: meetupId });
+  const tocByBot = new Map(
+    ((briefcaseRows as { bot_id: string; skills: unknown }[] | null) || []).map((r) => [r.bot_id, { skills: r.skills }])
+  );
   const briefcases: BotBriefcase[] = meetup.meetup_participants.map((mb: any) => ({
     botId: mb.bot.id,
     botName: mb.bot.name,
