@@ -166,3 +166,20 @@ export function ownBriefcases(
   const toc = new Map(rows.map((r) => [r.bot_id, r.toc]));
   return bots.map((b) => ({ botId: b.id, botName: b.name, isOwn: true, skills: cardsFromManifest(toc.get(b.id)) }));
 }
+
+/** Archive entry: safe fields only from get_archive(). Stars/traded are a hook until ratings land. */
+export type ArchiveSkill = SkillCard & { stars?: number | null; reviews?: number | null; traded?: number | null };
+export type ArchiveBot = { botId: string; botName: string; isOwn: boolean; skills: ArchiveSkill[] };
+
+export function archiveFromRows(rows: { bot_id: string; bot_name: string; is_own: boolean; skills: unknown }[]): ArchiveBot[] {
+  return rows.map((r) => ({ botId: r.bot_id, botName: r.bot_name, isOwn: !!r.is_own, skills: cardsFromManifest({ skills: r.skills }) }));
+}
+
+/** Case-insensitive filter over bot name, skill name and summary. */
+export function filterArchive(bots: ArchiveBot[], q: string): ArchiveBot[] {
+  const t = q.trim().toLowerCase();
+  if (!t) return bots;
+  return bots
+    .map((b) => (b.botName.toLowerCase().includes(t) ? b : { ...b, skills: b.skills.filter((s) => `${s.name} ${s.description}`.toLowerCase().includes(t)) }))
+    .filter((b) => b.botName.toLowerCase().includes(t) || b.skills.length > 0);
+}
