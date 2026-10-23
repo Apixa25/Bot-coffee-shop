@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://www.botcoffeeshop.com/briefcase-spec/v1/briefcase.schema.json",
+  "$id": "https://botcoffeeshop.com/briefcase-spec/v1/briefcase.schema.json",
   "title": "Briefcase table of contents (briefcase.json)",
   "type": "object",
   "required": [

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://www.botcoffeeshop.com/briefcase-spec/v1/label.schema.json",
+  "$id": "https://botcoffeeshop.com/briefcase-spec/v1/label.schema.json",
   "title": "Skill label (label.json)",
   "type": "object",
   "required": ["spec_version", "id", "version", "creator", "usage", "requirements", "secrets_check"],
