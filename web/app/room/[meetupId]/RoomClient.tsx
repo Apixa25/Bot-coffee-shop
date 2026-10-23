@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import PixiRoom from './PixiRoom';
+import PixiRoom, { BRIEFCASE_POSITIONS } from './PixiRoom';
+import RoomBriefcases from '@/components/briefcase/RoomBriefcases';
+import type { BotBriefcase } from '@/lib/briefcase/view';
 
 type Bot = {
   id: string;
@@ -55,7 +57,9 @@ export default function RoomClient({
   profiles,
   rounds,
   userId,
+  briefcases = [],
 }: {
+  briefcases?: BotBriefcase[];
   meetup: Meetup;
   bots: Bot[];
   avatars: Avatar[];
@@ -218,6 +222,7 @@ export default function RoomClient({
               currentMessage={currentMessage}
               visibleMessages={visibleMessages}
               rounds={rounds}
+              overlay={<RoomBriefcases briefcases={briefcases} positions={BRIEFCASE_POSITIONS} meetupId={meetup.id} />}
             />
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import RoomClient from './RoomClient';
+import { cardsFromManifest, type BotBriefcase } from '@/lib/briefcase/view';
 
 export default async function RoomPage({
   params,
@@ -24,11 +25,11 @@ export default async function RoomPage({
     .select(
       `
       *,
-      meetup_bots!inner(
+      meetup_participants!inner(
         bot:bots!inner(
           id,
           name,
-          owner:owners!inner(auth_user_id)
+          owner:owners!inner(auth_id)
         )
       )
     `
@@ -41,8 +42,8 @@ export default async function RoomPage({
   }
 
   // Check if user owns at least one bot in this meetup
-  const userOwnsBotInMeetup = meetup.meetup_bots.some(
-    (mb: any) => mb.bot.owner.auth_user_id === user.id
+  const userOwnsBotInMeetup = meetup.meetup_participants.some(
+    (mb: any) => mb.bot.owner.auth_id === user.id
   );
 
   if (!userOwnsBotInMeetup) {
@@ -50,7 +51,7 @@ export default async function RoomPage({
   }
 
   // Fetch bot avatars
-  const botIds = meetup.meetup_bots.map((mb: any) => mb.bot.id);
+  const botIds = meetup.meetup_participants.map((mb: any) => mb.bot.id);
   const { data: avatars } = await supabase
     .from('bot_avatars')
     .select('*')
@@ -76,10 +77,23 @@ export default async function RoomPage({
     .eq('meetup_id', meetupId)
     .order('round', { ascending: true });
 
+  // Sanitized skill lists for every bot in this meetup (names, summaries, safe metadata only).
+  const { data: briefcaseRows } = await supabase.rpc('get_meetup_briefcases', { p_meetup_id: meetupId });
+  const tocByBot = new Map(
+    ((briefcaseRows as { bot_id: string; skills: unknown }[] | null) || []).map((r) => [r.bot_id, { skills: r.skills }])
+  );
+  const briefcases: BotBriefcase[] = meetup.meetup_participants.map((mb: any) => ({
+    botId: mb.bot.id,
+    botName: mb.bot.name,
+    isOwn: mb.bot.owner.auth_id === user.id,
+    skills: cardsFromManifest(tocByBot.get(mb.bot.id)),
+  }));
+
   return (
     <RoomClient
+      briefcases={briefcases}
       meetup={meetup}
-      bots={meetup.meetup_bots.map((mb: any) => mb.bot)}
+      bots={meetup.meetup_participants.map((mb: any) => mb.bot)}
       avatars={avatars || []}
       messages={messages || []}
       profiles={profiles || []}
