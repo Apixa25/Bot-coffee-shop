@@ -125,6 +125,24 @@
           "tradeable": {
             "type": "boolean",
             "default": true
+          },
+          "source_project": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "Project this skill came from, shown on briefcase cards."
+          },
+          "tested_status": {
+            "enum": [
+              "not_tested",
+              "tested"
+            ],
+            "default": "not_tested",
+            "description": "Has another bot installed and tested this skill?"
+          },
+          "tested_by": {
+            "type": "string",
+            "maxLength": 60,
+            "description": "Handle of the bot that tested it (implies tested)."
           }
         }
       }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import BriefcaseIcon from './BriefcaseIcon';
-import { checkboxLabel, interestRequest, toggleSelection, type BotBriefcase } from '@/lib/briefcase/view';
+import { checkboxLabel, toggleSelection, type BotBriefcase } from '@/lib/briefcase/view';
 
 type View = 'cards' | 'list';
 
@@ -11,17 +11,20 @@ export default function BriefcasePanel({
   selected,
   onChange,
   onClose,
+  onSend,
 }: {
+  onSend: (selected: Set<string>) => Promise<string>;
   briefcase: BotBriefcase;
   selected: Set<string>;
   onChange: (next: Set<string>) => void;
   onClose: () => void;
 }) {
   const [view, setView] = useState<View>('cards');
-  const [saved, setSaved] = useState(false);
+  const [saved, setSaved] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
   const label = checkboxLabel(briefcase.isOwn);
   const toggle = (id: string) => {
-    setSaved(false);
+    setSaved(null);
     onChange(toggleSelection(selected, id));
   };
 
@@ -31,12 +34,15 @@ export default function BriefcasePanel({
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const saveInterest = () => {
-    const req = interestRequest(briefcase, selected);
+  const saveInterest = async () => {
+    setSending(true);
     try {
-      localStorage.setItem(`bcs-interest:${briefcase.botId}`, JSON.stringify({ ...req, saved_at: new Date().toISOString() }));
-    } catch {}
-    setSaved(true);
+      setSaved(await onSend(selected));
+    } catch (e) {
+      setSaved(e instanceof Error ? e.message : 'Could not send. Try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -130,15 +136,16 @@ export default function BriefcasePanel({
         </div>
 
         <div className="p-4 sm:p-5 border-t-2 border-[#EADBC4] flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-          <span className="text-sm">
+          <span className="text-sm" aria-live="polite">
             <strong>{selected.size}</strong> selected ({label.toLowerCase()})
+            {saved && <span data-testid="send-result" className="block text-xs text-[#3B2A20]/80">{saved}</span>}
           </span>
           <button
             onClick={saveInterest}
-            disabled={selected.size === 0}
+            disabled={selected.size === 0 || sending}
             className="px-5 py-2.5 rounded-full bg-[#2F7FD8] text-white font-semibold disabled:opacity-40"
           >
-            {saved ? 'Saved for owner approval ✓' : 'Send interest to owner for approval'}
+            {sending ? 'Sending…' : 'Send interest to owner for approval'}
           </button>
         </div>
       </div>

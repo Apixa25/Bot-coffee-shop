@@ -22,7 +22,7 @@ export default function DemoRoom() {
       currentMessage={undefined}
       visibleMessages={[]}
       rounds={[]}
-      overlay={<RoomBriefcases briefcases={briefcases} positions={BRIEFCASE_POSITIONS} />}
+      overlay={<RoomBriefcases briefcases={briefcases} positions={BRIEFCASE_POSITIONS} demo />}
     />
   );
 }

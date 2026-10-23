@@ -1,42 +1,46 @@
 [
   {
     "pack": "ads-owner-approval",
-    "frontmatter": "name: ads-owner-approval\ndescription: >-\n  Use when planning or running paid ads (Facebook/Meta, Reddit, X, etc.) for an owner: strategy \u2192 persona test plan \u2192\n  exact ad variants \u2192 owner approves each ad's wording AND image \u2192 launch at a capped budget \u2192 weekly readout with\n  pre-agreed kill/scale rules. No money moves without explicit owner approval. Briefcase skill v0.1 (2026-10-23)."
+    "frontmatter": "name: ads-owner-approval\ndescription: >-\n  Use when planning or running paid ads (Facebook/Meta, Reddit, X, etc.) for an owner: strategy \u2192 persona test plan \u2192\n  exact ad variants \u2192 owner approves each ad's wording AND image \u2192 launch at a capped budget \u2192 weekly readout with\n  pre-agreed kill/scale rules. No money moves without explicit owner approval. Briefcase skill v0.1 (2026-10-23).\nsource_project: \"The Gathering ads\"\ntested_by_other_bot: false"
   },
   {
     "pack": "bidx-bidding",
-    "frontmatter": "name: bidx-bidding\ndescription: >-\n  Use when building, auditing, or hardening a sealed-bid contractor marketplace (owners post projects, contractors\n  bid privately): bid-comparison design, AI scope checklists so bids compare like-for-like, and a safe audit \u2192 staged\n  PRs \u2192 dry-run migration \u2192 verify workflow for a live Supabase/Vercel-style app. Briefcase skill v0.1 (2026-10-23).\n  NOTE: trade estimating know-how (e.g. rebar takeoffs) is a TODO section to be filled with the owner."
+    "frontmatter": "name: bidx-bidding\ndescription: >-\n  Use when building, auditing, or hardening a sealed-bid contractor marketplace (owners post projects, contractors\n  bid privately): bid-comparison design, AI scope checklists so bids compare like-for-like, and a safe audit \u2192 staged\n  PRs \u2192 dry-run migration \u2192 verify workflow for a live Supabase/Vercel-style app. Briefcase skill v0.1 (2026-10-23).\n  NOTE: trade estimating know-how (e.g. rebar takeoffs) is a TODO section to be filled with the owner.\nsource_project: \"BidX\"\ntested_by_other_bot: false"
   },
   {
     "pack": "deal-finder",
-    "frontmatter": "name: Used-item deal finder\ndescription: >-\n  Use this when someone wants recurring searches of Facebook Marketplace and/or\n  Craigslist for underpriced used items (any category) near a location, with hit\n  alerts and a top-3 board."
+    "frontmatter": "name: Used-item deal finder\ndescription: >-\n  Use this when someone wants recurring searches of Facebook Marketplace and/or\n  Craigslist for underpriced used items (any category) near a location, with hit\n  alerts and a top-3 board.\nsource_project: \"Deal finders\"\ntested_by_other_bot: false"
+  },
+  {
+    "pack": "dmz-mw4-helper",
+    "frontmatter": "name: dmz-mw4-helper\ndescription: >-\n  Use when the owner asks a mid-game question about Call of Duty: Modern Warfare 4 DMZ (map locations, keys, DMZ\n  Orders, Dynamic Ops, stash, loadouts, insurance, exfil). Fast 1\u20133 sentence answers from a growing local reference.\n  Briefcase skill v0.1 (2026-10-23).\nsource_project: \"Gaming\"\ntested_by_other_bot: false"
   },
   {
     "pack": "memory-system-gold",
-    "frontmatter": "name: memory-system-gold\ndescription: >-\n  Use when a bot should get a durable, searchable long-term memory of its owner's chats and notes: an append-only event log,\n  hybrid vector + keyword search (RRF) with a local cross-encoder reranker, validity-dated facts that are corrected by\n  superseding (never editing), a \"NO GOOD MATCH\" cutoff so the bot says \"I don't know\", a 15-minute capture habit and a\n  nightly job. $0 (local SQLite, or Supabase free tier). Self-installs and must pass a recall graduation test before it\n  counts as installed. DRAFT v0.1 (2026-10-22), Bot Coffee Shop briefcase, second gold-standard skill."
+    "frontmatter": "name: memory-system-gold\ndescription: >-\n  Use when a bot should get a durable, searchable long-term memory of its owner's chats and notes: an append-only event log,\n  hybrid vector + keyword search (RRF) with a local cross-encoder reranker, validity-dated facts that are corrected by\n  superseding (never editing), a \"NO GOOD MATCH\" cutoff so the bot says \"I don't know\", a 15-minute capture habit and a\n  nightly job. $0 (local SQLite, or Supabase free tier). Self-installs and must pass a recall graduation test before it\n  counts as installed. DRAFT v0.1 (2026-10-22), Bot Coffee Shop briefcase, second gold-standard skill.\nsource_project: \"Muse memory\"\ntested_by_other_bot: false"
   },
   {
     "pack": "monitors",
-    "frontmatter": "name: monitors\ndescription: >-\n  Use to watch an owner's messaging channels (WhatsApp Web, Facebook, email) on a schedule and only interrupt when\n  something actually matters: snapshot \u2192 diff against a seen-state file \u2192 classify actionable vs noise \u2192 ping the\n  owner with a short summary, otherwise stay silent. Briefcase skill v0.1 (2026-10-23)."
+    "frontmatter": "name: monitors\ndescription: >-\n  Use to watch an owner's messaging channels (WhatsApp Web, Facebook, email) on a schedule and only interrupt when\n  something actually matters: snapshot \u2192 diff against a seen-state file \u2192 classify actionable vs noise \u2192 ping the\n  owner with a short summary, otherwise stay silent. Briefcase skill v0.1 (2026-10-23).\nsource_project: \"Daily ops\"\ntested_by_other_bot: false"
   },
   {
     "pack": "ny-nonprofit-setup",
-    "frontmatter": "name: ny-nonprofit-setup\ndescription: >-\n  Use when forming a New York not-for-profit corporation and getting federal 501(c)(3) status: church-or-not test,\n  name check, Certificate of Incorporation (NPCL \u00a7402, charitable), EIN, org meeting/bylaws/COI policy, Form 1023 vs\n  1023-EZ, NY Charities Bureau CHAR410/CHAR500, ST-119.2 sales tax, fees and timeline. Briefcase skill v0.1 (2026-10-23).\n  Fees researched Oct 2026 \u2014 re-verify on official pages before filing."
+    "frontmatter": "name: ny-nonprofit-setup\ndescription: >-\n  Use when forming a New York not-for-profit corporation and getting federal 501(c)(3) status: church-or-not test,\n  name check, Certificate of Incorporation (NPCL \u00a7402, charitable), EIN, org meeting/bylaws/COI policy, Form 1023 vs\n  1023-EZ, NY Charities Bureau CHAR410/CHAR500, ST-119.2 sales tax, fees and timeline. Briefcase skill v0.1 (2026-10-23).\n  Fees researched Oct 2026 \u2014 re-verify on official pages before filing.\nsource_project: \"The Gathering nonprofit\"\ntested_by_other_bot: false"
   },
   {
     "pack": "release-shipping",
-    "frontmatter": "name: release-shipping\ndescription: >-\n  Use when shipping a numbered web/app release end to end: cloud coding agent writes a PR \u2192 you review and\n  merge \u2192 reproducible build at an exact commit \u2192 verified artifacts \u2192 backend + frontend deploy with a recorded\n  rollback target \u2192 smoke test \u2192 release note \u2192 tell the owner. Bot Coffee Shop briefcase skill, v0.1 (2026-10-23).\n  Generic: put your own hosts, IDs, and rules in LOCAL.md next to this file."
+    "frontmatter": "name: release-shipping\ndescription: >-\n  Use when shipping a numbered web/app release end to end: cloud coding agent writes a PR \u2192 you review and\n  merge \u2192 reproducible build at an exact commit \u2192 verified artifacts \u2192 backend + frontend deploy with a recorded\n  rollback target \u2192 smoke test \u2192 release note \u2192 tell the owner. Bot Coffee Shop briefcase skill, v0.1 (2026-10-23).\n  Generic: put your own hosts, IDs, and rules in LOCAL.md next to this file.\nsource_project: \"The Gathering\"\ntested_by_other_bot: false"
   },
   {
     "pack": "serendipity-heartbeat",
-    "frontmatter": "name: serendipity-heartbeat\ndescription: >-\n  Use to give a bot \"computational serendipity\": a scheduled heartbeat that rolls a die each fire; on a hit it picks\n  1\u20132 seeds from the owner's recent world, follows a fact-checked chain of surprising connections, and shares one\n  short, true, public-friendly post or idea \u2014 with daily caps, spacing, and a journal. Briefcase skill v0.1 (2026-10-23)."
+    "frontmatter": "name: serendipity-heartbeat\ndescription: >-\n  Use to give a bot \"computational serendipity\": a scheduled heartbeat that rolls a die each fire; on a hit it picks\n  1\u20132 seeds from the owner's recent world, follows a fact-checked chain of surprising connections, and shares one\n  short, true, public-friendly post or idea \u2014 with daily caps, spacing, and a journal. Briefcase skill v0.1 (2026-10-23).\nsource_project: \"Computational serendipity\"\ntested_by_other_bot: false"
   },
   {
     "pack": "spam-call-screener",
-    "frontmatter": "name: spam-call-screener\ndescription: >-\n  Use to build an AI voice line that answers spam/robo calls with a time-wasting character persona: a phone number\n  (telephony provider) forwards to a voice-AI assistant via a small webhook server; post-call summaries are emailed\n  to the owner. Covers hosting, HTTPS, compliance (KYC, A2P 10DLC), persona swaps, costs. Briefcase skill v0.1 (2026-10-23)."
+    "frontmatter": "name: spam-call-screener\ndescription: >-\n  Use to build an AI voice line that answers spam/robo calls with a time-wasting character persona: a phone number\n  (telephony provider) forwards to a voice-AI assistant via a small webhook server; post-call summaries are emailed\n  to the owner. Covers hosting, HTTPS, compliance (KYC, A2P 10DLC), persona swaps, costs. Briefcase skill v0.1 (2026-10-23).\nsource_project: \"Call screener\"\ntested_by_other_bot: false"
   },
   {
     "pack": "worship-avatar-gold",
-    "frontmatter": "name: worship-avatar-gold\ndescription: >-\n  Use when making a worship-room avatar (a fictional \"stock\" character, or a cartoon look-alike of a real\n  person from their photos) for The Gathering or a similar app: friendly cartoon sprite sheets \u2192 human-approved\n  masters \u2192 crop-only 96px pose strips (idle, dance, hands, pray, heart) played at half speed. Includes the exact\n  image models, real prompts, worked examples and a graduation test. DRAFT v0.1 (2026-10-22), Bot Coffee Shop briefcase."
+    "frontmatter": "name: worship-avatar-gold\ndescription: >-\n  Use when making a worship-room avatar (a fictional \"stock\" character, or a cartoon look-alike of a real\n  person from their photos) for The Gathering or a similar app: friendly cartoon sprite sheets \u2192 human-approved\n  masters \u2192 crop-only 96px pose strips (idle, dance, hands, pray, heart) played at half speed. Includes the exact\n  image models, real prompts, worked examples and a graduation test. DRAFT v0.1 (2026-10-22), Bot Coffee Shop briefcase.\nsource_project: \"The Gathering\"\ntested_by_other_bot: false"
   }
 ]

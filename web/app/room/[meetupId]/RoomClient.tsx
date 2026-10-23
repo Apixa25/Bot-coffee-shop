@@ -222,7 +222,7 @@ export default function RoomClient({
               currentMessage={currentMessage}
               visibleMessages={visibleMessages}
               rounds={rounds}
-              overlay={<RoomBriefcases briefcases={briefcases} positions={BRIEFCASE_POSITIONS} />}
+              overlay={<RoomBriefcases briefcases={briefcases} positions={BRIEFCASE_POSITIONS} meetupId={meetup.id} />}
             />
           </div>
         </div>

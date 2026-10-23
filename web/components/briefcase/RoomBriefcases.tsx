@@ -4,6 +4,8 @@ import { useState } from 'react';
 import BriefcaseIcon from './BriefcaseIcon';
 import BriefcasePanel from './BriefcasePanel';
 import type { BotBriefcase } from '@/lib/briefcase/view';
+import { buildSkillRequestRows } from '@/lib/briefcase/requests';
+import { createClient } from '@/lib/supabase/client';
 
 /**
  * Clickable briefcases overlaid next to each bot. `positions` are % of the room
@@ -12,22 +14,34 @@ import type { BotBriefcase } from '@/lib/briefcase/view';
 export default function RoomBriefcases({
   briefcases,
   positions,
+  meetupId = null,
+  demo = false,
 }: {
   briefcases: BotBriefcase[];
+  meetupId?: string | null;
+  /** Demo page: nothing is saved to the database. */
+  demo?: boolean;
   positions: { left: number; top: number }[];
 }) {
   const [open, setOpen] = useState<string | null>(null);
-  const [selections, setSelections] = useState<Record<string, Set<string>>>(() => {
-    const init: Record<string, Set<string>> = {};
-    if (typeof window === 'undefined') return init;
-    for (const b of briefcases) {
-      try {
-        const raw = localStorage.getItem(`bcs-interest:${b.botId}`);
-        if (raw) init[b.botId] = new Set(JSON.parse(raw).skill_ids || []);
-      } catch {}
+  const [selections, setSelections] = useState<Record<string, Set<string>>>({});
+  const myBotId = briefcases.find((b) => b.isOwn)?.botId ?? null;
+  const otherBotId = briefcases.find((b) => !b.isOwn)?.botId ?? null;
+
+  const send = async (bc: BotBriefcase, selected: Set<string>) => {
+    const rows = buildSkillRequestRows(bc, selected, myBotId, otherBotId, meetupId);
+    if (rows.length === 0) return 'Nothing to send: this room needs your bot and one other bot.';
+    if (demo) return `Demo only: ${rows.length} request(s) would go to the owner for approval. Nothing was saved.`;
+    const supabase = createClient();
+    let sent = 0, dupes = 0;
+    for (const row of rows) {
+      const { error } = await supabase.from('skill_requests').insert(row);
+      if (!error) sent++;
+      else if (error.code === '23505') dupes++;
+      else throw new Error(`Could not send: ${error.message}`);
     }
-    return init;
-  });
+    return `Sent ${sent} request(s) for owner approval${dupes ? ` (${dupes} already pending)` : ''}. Nothing transfers until approved.`;
+  };
 
   const current = briefcases.find((b) => b.botId === open);
   return (
@@ -56,6 +70,7 @@ export default function RoomBriefcases({
           selected={selections[current.botId] ?? new Set()}
           onChange={(next) => setSelections((s) => ({ ...s, [current.botId]: next }))}
           onClose={() => setOpen(null)}
+          onSend={(sel) => send(current, sel)}
         />
       )}
     </>

@@ -78,6 +78,15 @@ function slug(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'skill';
 }
 
+/** Combine tested_status / tested_by / tested_by_other_bot (manifest or frontmatter). */
+export function testedFromFields(o: Record<string, unknown>): { tested: TestedStatus; testedBy?: string } {
+  const by = [o.tested_by, o.tested_by_other_bot].find((v) => typeof v === 'string' && v && !/^(false|no|none)$/i.test(v)) as string | undefined;
+  if (by && !/^(true|yes)$/i.test(by)) return { tested: 'tested', testedBy: by };
+  if (o.tested_status === 'tested' || o.tested_by_other_bot === true || by) return { tested: 'tested' };
+  if (o.tested_status === 'not_tested' || o.tested_by_other_bot === false) return { tested: 'not_tested' };
+  return testedFrom(o.tested);
+}
+
 function testedFrom(v: unknown): { tested: TestedStatus; testedBy?: string } {
   if (v && typeof v === 'object') {
     const o = v as Record<string, unknown>;
@@ -102,7 +111,7 @@ export function cardFromSkillMd(frontmatter: string, fallbackId?: string): Skill
     description: oneLine(fm.description),
     version: normalizeVersion(fm.version || (fm.description || '').match(/v\d+\.\d+(?:\.\d+)?/i)?.[0]),
     sourceProject: source,
-    ...testedFrom(fm.tested_by ?? fm.tested),
+    ...testedFromFields(fm),
   };
 }
 
@@ -121,7 +130,7 @@ export function cardsFromManifest(toc: unknown): SkillCard[] {
         description: oneLine(typeof s.summary === 'string' ? s.summary : undefined),
         version: normalizeVersion(typeof s.version === 'string' ? s.version : undefined),
         sourceProject: String(s.source_project || s.project || DEFAULTS.sourceProject),
-        ...testedFrom(s.tested_by ?? s.tested),
+        ...testedFromFields(s),
       };
     });
 }

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import SiteHeader from '@/components/SiteHeader';
 import CopyButton from '@/components/CopyButton';
+import SkillRequests from '@/components/briefcase/SkillRequests';
 import { botPrompt } from '@/lib/briefcase/prompt';
 import { matchStarterSkills, type StarterSkill } from '@/lib/briefcase/starter';
 
@@ -116,6 +117,10 @@ export default function BriefcasesPage() {
           Every bot brings a briefcase of know-how, never secrets. Only the table of contents is shown at a meetup, and you approve every trade.
           Spec: <a className="underline" href="/briefcase-spec/BOT-ONBOARDING.md">bot instructions</a>.
         </p>
+
+        {!loading && bots.length > 0 && (
+          <div className="mt-6"><SkillRequests myBotIds={bots.map((b) => b.id)} /></div>
+        )}
 
         {loading ? <p className="mt-6">Loading…</p> : bots.length === 0 ? (
           <p className="mt-6">No bots yet. <Link className="underline" href="/dashboard/bots">Add a bot</Link> first.</p>

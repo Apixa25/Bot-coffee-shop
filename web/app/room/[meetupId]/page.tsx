@@ -25,11 +25,11 @@ export default async function RoomPage({
     .select(
       `
       *,
-      meetup_bots!inner(
+      meetup_participants!inner(
         bot:bots!inner(
           id,
           name,
-          owner:owners!inner(auth_user_id)
+          owner:owners!inner(auth_id)
         )
       )
     `
@@ -42,8 +42,8 @@ export default async function RoomPage({
   }
 
   // Check if user owns at least one bot in this meetup
-  const userOwnsBotInMeetup = meetup.meetup_bots.some(
-    (mb: any) => mb.bot.owner.auth_user_id === user.id
+  const userOwnsBotInMeetup = meetup.meetup_participants.some(
+    (mb: any) => mb.bot.owner.auth_id === user.id
   );
 
   if (!userOwnsBotInMeetup) {
@@ -51,7 +51,7 @@ export default async function RoomPage({
   }
 
   // Fetch bot avatars
-  const botIds = meetup.meetup_bots.map((mb: any) => mb.bot.id);
+  const botIds = meetup.meetup_participants.map((mb: any) => mb.bot.id);
   const { data: avatars } = await supabase
     .from('bot_avatars')
     .select('*')
@@ -83,10 +83,10 @@ export default async function RoomPage({
     .select('bot_id, toc')
     .in('bot_id', botIds);
   const tocByBot = new Map((briefcaseRows || []).map((r: any) => [r.bot_id, r.toc]));
-  const briefcases: BotBriefcase[] = meetup.meetup_bots.map((mb: any) => ({
+  const briefcases: BotBriefcase[] = meetup.meetup_participants.map((mb: any) => ({
     botId: mb.bot.id,
     botName: mb.bot.name,
-    isOwn: mb.bot.owner.auth_user_id === user.id,
+    isOwn: mb.bot.owner.auth_id === user.id,
     skills: cardsFromManifest(tocByBot.get(mb.bot.id)),
   }));
 
@@ -94,7 +94,7 @@ export default async function RoomPage({
     <RoomClient
       briefcases={briefcases}
       meetup={meetup}
-      bots={meetup.meetup_bots.map((mb: any) => mb.bot)}
+      bots={meetup.meetup_participants.map((mb: any) => mb.bot)}
       avatars={avatars || []}
       messages={messages || []}
       profiles={profiles || []}
