@@ -16,6 +16,8 @@ type Briefcase = {
   report: { warnings?: string[] };
   safety_review: { status: string };
   files: Record<string, string>;
+  wish_list: string[] | null;
+  owner_goals: { goals?: string; current_focus?: string; share_ai_spend?: boolean } | null;
 };
 type Ticket = { bot_id: string; code: string; used_at: string | null };
 type Report = { valid: boolean; errors?: string[]; warnings?: string[]; error?: string };
@@ -49,7 +51,7 @@ export default function BriefcasesPage() {
     setEmail(user.email ?? null);
     const [{ data: b }, { data: bc }, { data: t }, { data: s }, { data: a }, { data: ans }] = await Promise.all([
       supabase.from('bots').select('id, name').order('created_at'),
-      supabase.from('briefcases').select('bot_id, briefcase_id, briefcase_version, uploaded_at, toc, report, safety_review, files'),
+      supabase.from('briefcases').select('bot_id, briefcase_id, briefcase_version, uploaded_at, toc, report, safety_review, files, wish_list, owner_goals'),
       supabase.from('golden_tickets').select('bot_id, code, used_at').order('created_at'),
       supabase.from('starter_skills').select('id, skill_id, version, name, summary, kind, tags, good_for, creator_handle, creator_platform, license'),
       supabase.from('starter_adoptions').select('bot_id, starter_skill_id'),
@@ -135,7 +137,7 @@ export default function BriefcasesPage() {
                   <>
                     <p className="mt-1 text-sm text-cream/80">Paste this to {bot.name}, on any platform. Single-use: it&apos;s used up when the first briefcase is accepted.</p>
                     <div className="mt-3 flex flex-col sm:flex-row gap-3 sm:items-start">
-                      <p className="flex-1 rounded-lg bg-espresso-dark p-3 font-mono text-xs sm:text-sm break-words">{botPrompt(openTicket.code)}</p>
+                      <pre className="flex-1 whitespace-pre-wrap rounded-lg bg-espresso-dark p-3 font-mono text-xs break-words max-h-72 overflow-y-auto">{botPrompt(openTicket.code)}</pre>
                       <CopyButton text={botPrompt(openTicket.code)} label="Copy prompt" />
                     </div>
                     <Link className="mt-2 inline-block text-sm text-caramel underline" href={`/ticket/${openTicket.code}`}>Open ticket page</Link>
@@ -156,6 +158,24 @@ export default function BriefcasesPage() {
                       {bc.briefcase_id}{bc.briefcase_version ? ` v${bc.briefcase_version}` : ''} · {bc.toc.bot?.specialty} · uploaded {new Date(bc.uploaded_at).toLocaleString()}
                       {' '}· AI review: {bc.safety_review?.status === 'not_run' ? 'off' : bc.safety_review?.status}
                     </p>
+                    {(bc.owner_goals || bc.wish_list?.length) && (
+                      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                        {bc.owner_goals && (
+                          <div className="rounded-xl bg-cream border border-latte p-3 text-sm">
+                            <p className="font-semibold">Owner goals</p>
+                            {bc.owner_goals.goals && <p className="mt-1"><span className="text-espresso/60">Goals:</span> {bc.owner_goals.goals}</p>}
+                            {bc.owner_goals.current_focus && <p className="mt-1"><span className="text-espresso/60">Focus now:</span> {bc.owner_goals.current_focus}</p>}
+                            {typeof bc.owner_goals.share_ai_spend === 'boolean' && <p className="mt-1"><span className="text-espresso/60">Share AI spend:</span> {bc.owner_goals.share_ai_spend ? 'yes' : 'no'}</p>}
+                          </div>
+                        )}
+                        {!!bc.wish_list?.length && (
+                          <div className="rounded-xl bg-cream border border-latte p-3 text-sm">
+                            <p className="font-semibold">Wish list</p>
+                            <ul className="mt-1 list-disc pl-5">{bc.wish_list.map((w, i) => <li key={i}>{w}</li>)}</ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <ul className="mt-3 divide-y divide-latte">
                       {(bc.toc.skills || []).map((s) => (
                         <li key={s.id} className="py-3">

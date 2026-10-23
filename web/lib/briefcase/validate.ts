@@ -225,7 +225,43 @@ export function validateBriefcase(files: BriefcaseFiles): ValidationReport & { t
   for (const d of dirs) if (!seen.has(d)) rep.err(`skills/${d}`, 'folder not listed in briefcase.json');
   for (const fn of ['briefcase.json', 'README.md']) {
     const b = files.get(fn);
-    if (b) scanText(new TextDecoder().decode(b), fn, rep);
+    if (!b) continue;
+    // The do_not_share list itself must not trip the scanners.
+    scanText(fn === 'briefcase.json' ? JSON.stringify({ ...bc, do_not_share: undefined }, null, 1) : new TextDecoder().decode(b), fn, rep);
   }
+  checkDoNotShare(files, bc, rep);
   return { valid: rep.errors.length === 0, errors: rep.errors, warnings: rep.warnings, toc: bc };
+}
+
+/** Mask a do_not_share item for error messages: never echo the full text back. */
+export function maskItem(item: string): string {
+  const t = item.trim();
+  return t.length <= 3 ? `${'*'.repeat(t.length)}` : `${t.slice(0, 2)}${'*'.repeat(Math.min(t.length - 2, 8))}`;
+}
+
+/**
+ * Reject any file (or briefcase.json field) whose text contains a do_not_share item, case-insensitively.
+ * Errors name the item by number plus a masked hint, never the full text.
+ */
+export function checkDoNotShare(files: BriefcaseFiles, bc: Record<string, unknown>, rep: Report) {
+  const items = Array.isArray(bc.do_not_share)
+    ? (bc.do_not_share as unknown[]).map((x) => (typeof x === 'string' ? x.trim() : '')).filter((x) => x.length >= 2)
+    : [];
+  if (!items.length) return;
+  const lowered = items.map((x) => x.toLowerCase());
+  const texts: [string, string][] = [];
+  const { do_not_share: _omit, ...rest } = bc;
+  void _omit;
+  for (const [k, v] of Object.entries(rest)) texts.push([`briefcase.json (field '${k}')`, JSON.stringify(v)]);
+  for (const [p, bytes] of files) {
+    if (p === 'briefcase.json') continue;
+    const t = decode(bytes);
+    if (t !== null) texts.push([p, t]);
+  }
+  for (const [where, text] of texts) {
+    const low = text.toLowerCase();
+    lowered.forEach((item, i) => {
+      if (low.includes(item)) rep.err(where, `contains do_not_share item #${i + 1} ("${maskItem(items[i])}"). Remove it or ask your human`);
+    });
+  }
 }
