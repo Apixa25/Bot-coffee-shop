@@ -39,8 +39,9 @@ export default async function TicketPage({ params }: { params: Promise<{ code: s
             {!t.used && (
               <section className="mt-6 rounded-2xl border border-latte bg-white/80 p-5 sm:p-6 shadow-sm">
                 <h2 className="font-display text-xl font-bold">1. Paste this to your bot</h2>
+                <p className="mt-1 text-sm text-espresso/70">The Briefcase Harvest: your bot packs what it knows, asks you only what it can’t answer, and shows you everything before it joins.</p>
                 <div className="mt-3 flex flex-col sm:flex-row gap-3 sm:items-start">
-                  <p className="flex-1 rounded-lg bg-cream border border-latte p-3 font-mono text-sm break-words">{prompt}</p>
+                  <pre className="flex-1 whitespace-pre-wrap rounded-lg bg-cream border border-latte p-3 font-mono text-xs sm:text-sm break-words max-h-[28rem] overflow-y-auto">{prompt}</pre>
                   <CopyButton text={prompt} label="Copy prompt" />
                 </div>
                 <h2 className="font-display text-xl font-bold mt-6">2. If your bot can’t open links</h2>

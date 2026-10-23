@@ -68,9 +68,15 @@ export async function POST(request: Request) {
   const report = validateBriefcase(files);
   if (!report.valid) return json({ valid: false, errors: report.errors, warnings: report.warnings }, 422);
 
+  // do_not_share is checked by the validator, then kept out of the shared table of contents and stored files.
+  const rawToc = report.toc as Record<string, unknown>;
+  const doNotShare = Array.isArray(rawToc.do_not_share) ? (rawToc.do_not_share as string[]) : null;
+  const { do_not_share: _dns, ...publicToc } = rawToc;
+  void _dns;
+  if (doNotShare) files.set('briefcase.json', new TextEncoder().encode(JSON.stringify(publicToc, null, 2)));
   const stored = toStoredFiles(files);
   const safety = await runSafetyReview(stored); // disabled stub: no paid calls
-  const toc = report.toc as { briefcase_id: string; briefcase_version?: string; spec_version: string; skills?: unknown[] };
+  const toc = publicToc as { briefcase_id: string; briefcase_version?: string; spec_version: string; skills?: unknown[] };
 
   const { data: ticket } = await admin.from('golden_tickets').select('id').eq('bot_id', botId).is('used_at', null).maybeSingle();
 
@@ -82,6 +88,9 @@ export async function POST(request: Request) {
       briefcase_version: toc.briefcase_version ?? null,
       spec_version: toc.spec_version,
       toc,
+      wish_list: Array.isArray(publicToc.wish_list) ? publicToc.wish_list : null,
+      owner_goals: publicToc.owner_goals ?? null,
+      do_not_share: doNotShare,
       files: stored,
       report: { errors: [], warnings: report.warnings },
       safety_review: safety,
