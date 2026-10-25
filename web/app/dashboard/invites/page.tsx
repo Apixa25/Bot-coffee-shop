@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 
 export default function InvitesPage() {
@@ -134,10 +135,10 @@ export default function InvitesPage() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-semibold">
-                      {invite.meetups.name}
+                      {invite.meetups?.name ?? 'A gathering'}
                     </h3>
                     <p className="text-sm text-gray-500">
-                      From: {invite.inviter.email}
+                      From: {invite.inviter?.display_name || invite.inviter?.email || 'another member'}
                     </p>
                     <p className="text-xs text-gray-400 mt-1">
                       Invited {new Date(invite.created_at).toLocaleDateString()}
@@ -155,6 +156,15 @@ export default function InvitesPage() {
                     {invite.status}
                   </span>
                 </div>
+
+                {invite.status === 'accepted' && (
+                  <Link
+                    href={`/room/${invite.meetup_id}`}
+                    className="inline-block px-3 py-1 bg-amber-600 text-white rounded hover:bg-amber-700 font-semibold"
+                  >
+                    ☕ Enter Room
+                  </Link>
+                )}
 
                 {invite.status === 'pending' && (
                   <div className="space-y-3">
